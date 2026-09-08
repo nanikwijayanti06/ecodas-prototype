@@ -1,0 +1,612 @@
+/* ================================
+   TRACKER PAGE
+================================ */
+
+.tracker-page {
+  width: calc(100% - 230px);
+  margin-left: 230px;
+  padding: 28px 34px 45px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: #f7faf8;
+  color: #173524;
+}
+
+/* ================================
+   HEADER
+================================ */
+
+.tracker-header {
+  margin-bottom: 24px;
+}
+
+.tracker-header h1 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 700;
+  color: #123c27;
+  letter-spacing: -0.4px;
+}
+
+.tracker-header p {
+  margin: 7px 0 0;
+  color: #718078;
+  font-size: 14px;
+}
+
+
+/* ================================
+   TOP SECTION
+================================ */
+
+.tracker-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+
+/* ================================
+   GENERAL PANEL
+================================ */
+
+.tracker-panel {
+  background: #ffffff;
+  border: 1px solid #e0e8e3;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(30, 70, 45, 0.035);
+}
+
+.input-panel {
+  padding: 24px;
+}
+
+.summary-panel {
+  padding: 24px;
+}
+
+
+/* ================================
+   PANEL TEXT
+================================ */
+
+.panel-title h2,
+.panel-heading-row h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #173b27;
+}
+
+.panel-title p,
+.panel-heading-row p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #7b8881;
+}
+
+
+/* ================================
+   FORM
+================================ */
+
+.input-panel form {
+  margin-top: 22px;
+}
+
+.field {
+  margin-bottom: 17px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #385344;
+}
+
+.field select,
+.field input {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  border: 1px solid #d8e1dc;
+  border-radius: 6px;
+  background: #fff;
+  padding: 0 12px;
+  color: #253c30;
+  font-size: 13px;
+  outline: none;
+  transition: border 0.15s ease;
+}
+
+.field select:focus,
+.field input:focus {
+  border-color: #247646;
+}
+
+.field select {
+  cursor: pointer;
+}
+
+.input-with-unit {
+  position: relative;
+}
+
+.input-with-unit input {
+  padding-right: 55px;
+}
+
+.input-with-unit span {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #8a958f;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.primary-button,
+.cancel-button {
+  height: 40px;
+  border-radius: 6px;
+  padding: 0 17px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-button {
+  border: 1px solid #176b3a;
+  background: #176b3a;
+  color: white;
+}
+
+.primary-button:hover {
+  background: #12582f;
+}
+
+.cancel-button {
+  border: 1px solid #d7dfda;
+  background: white;
+  color: #65736b;
+}
+
+.cancel-button:hover {
+  background: #f4f7f5;
+}
+
+
+/* ================================
+   ERROR
+================================ */
+
+.tracker-error {
+  margin-top: 17px;
+  padding: 9px 11px;
+  border-left: 3px solid #c84b42;
+  background: #fff7f6;
+  color: #b23c34;
+  font-size: 12px;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.summary-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.small-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #859189;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.summary-heading h2 {
+  margin: 0;
+  color: #176b3a;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.summary-heading h2 small {
+  font-size: 12px;
+  color: #78847d;
+  font-weight: 500;
+}
+
+.carbon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf7f0;
+  border: 1px solid #d6eadb;
+  color: #176b3a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.summary-line {
+  height: 1px;
+  background: #edf1ee;
+  margin: 20px 0 16px;
+}
+
+.comparison {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.comparison > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.comparison span {
+  color: #849089;
+  font-size: 11px;
+}
+
+.comparison strong {
+  color: #344d3d;
+  font-size: 14px;
+}
+
+.comparison-status {
+  font-size: 11px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.comparison-status.good {
+  background: #edf7f0;
+  color: #247044;
+}
+
+.comparison-status.high {
+  background: #fff2ef;
+  color: #b34c42;
+}
+
+.recommendation {
+  margin-top: 21px;
+  padding-top: 16px;
+  border-top: 1px solid #edf1ee;
+}
+
+.recommendation-title {
+  color: #385344;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.recommendation p {
+  margin: 0;
+  color: #77837c;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+
+/* ================================
+   CHART
+================================ */
+
+.chart-panel {
+  padding: 22px 24px 18px;
+  margin-bottom: 18px;
+}
+
+.panel-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.chart-unit,
+.history-count {
+  color: #7b8981;
+  font-size: 11px;
+}
+
+.chart-wrapper {
+  height: 230px;
+  margin-top: 20px;
+}
+
+
+/* ================================
+   HISTORY
+================================ */
+
+.history-panel {
+  overflow: hidden;
+}
+
+.history-panel .panel-heading-row {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid #e9eeeb;
+}
+
+.activity-table {
+  width: 100%;
+}
+
+.table-head,
+.table-row {
+  display: grid;
+  grid-template-columns:
+    minmax(280px, 2fr)
+    minmax(100px, 0.65fr)
+    minmax(100px, 0.65fr)
+    minmax(190px, 0.9fr);
+
+  align-items: center;
+}
+
+.table-head {
+  min-height: 42px;
+  padding: 0 24px;
+  background: #f7f9f8;
+  color: #7c8981;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.table-row {
+  min-height: 75px;
+  padding: 0 24px;
+  border-top: 1px solid #edf1ef;
+}
+
+.table-row:hover {
+  background: #fbfdfc;
+}
+
+
+/* ================================
+   ACTIVITY NAME
+================================ */
+
+.activity-name {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.activity-mark {
+  width: 4px;
+  height: 37px;
+  border-radius: 3px;
+  background: #5ba678;
+}
+
+.activity-mark.transport {
+  background: #438b6b;
+}
+
+.activity-mark.energy {
+  background: #789a86;
+}
+
+.activity-name strong {
+  display: block;
+  color: #1d3a29;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.activity-name small {
+  display: block;
+  margin-top: 4px;
+  color: #8a958f;
+  font-size: 11px;
+}
+
+
+/* ================================
+   AMOUNT
+================================ */
+
+.activity-amount {
+  color: #344a3c;
+  font-size: 13px;
+}
+
+.activity-amount small {
+  color: #929d96;
+  font-size: 11px;
+}
+
+
+/* ================================
+   CARBON
+================================ */
+
+.activity-carbon strong {
+  display: block;
+  color: #176b3a;
+  font-size: 14px;
+}
+
+.activity-carbon small {
+  display: block;
+  margin-top: 3px;
+  color: #929d96;
+  font-size: 10px;
+}
+
+
+/* ================================
+   ACTION BUTTONS
+================================ */
+
+.activity-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.edit-button,
+.delete-button {
+  height: 31px;
+  padding: 0 10px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.edit-button span,
+.delete-button span {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.edit-button {
+  border: 1px solid #d7e5dc;
+  background: #f5faf7;
+  color: #267047;
+}
+
+.edit-button:hover {
+  background: #eaf5ee;
+  border-color: #bcd7c5;
+}
+
+.delete-button {
+  border: 1px solid #ead9d7;
+  background: #fff8f7;
+  color: #b45148;
+}
+
+.delete-button:hover {
+  background: #fcefed;
+  border-color: #dfbcb8;
+}
+
+
+/* ================================
+   EMPTY
+================================ */
+
+.empty-history {
+  padding: 45px 20px;
+  text-align: center;
+  color: #89948e;
+  font-size: 13px;
+}
+
+
+/* ================================
+   FOOTNOTE
+================================ */
+
+.tracker-note {
+  text-align: center;
+  margin-top: 14px;
+  color: #9aa39e;
+  font-size: 10px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1050px) {
+
+  .tracker-top {
+    grid-template-columns: 1fr;
+  }
+
+  .table-head,
+  .table-row {
+    grid-template-columns:
+      minmax(230px, 2fr)
+      100px
+      100px
+      170px;
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .tracker-page {
+    width: 100%;
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .table-head {
+    display: none;
+  }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .activity-actions {
+    justify-content: flex-start;
+  }
+
+}
+
+
+@media (max-width: 550px) {
+
+  .tracker-page {
+    padding: 16px;
+  }
+
+  .tracker-header h1 {
+    font-size: 23px;
+  }
+
+  .comparison {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .table-row {
+    grid-template-columns: 1fr;
+  }
+
+}
