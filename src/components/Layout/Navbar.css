@@ -1,0 +1,23 @@
+.navbar-pem {
+  background-color: #05b875; /* Hijau tosca ala PEM UNY */
+  color: white;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.user-text {
+  font-size: 14px;
+  font-weight: 500;
+}

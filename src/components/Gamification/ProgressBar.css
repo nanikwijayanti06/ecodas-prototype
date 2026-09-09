@@ -1,0 +1,34 @@
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-label {
+  font-size: 13px;
+  color: #475569;
+  min-width: 90px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #059669;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.progress-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  min-width: 36px;
+  text-align: right;
+}

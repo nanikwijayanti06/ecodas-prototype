@@ -1,30 +1,28 @@
-import React, { createContext, useState, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // state user: { name, email, role, faculty }
+export function AuthProvider({ children }) {
+  // role disimpan di localStorage biar refresh gak logout sendiri
+  const [role, setRole] = useState(() => localStorage.getItem('ecodas_role') || null);
 
-  const login = (email, password, role = 'mahasiswa') => {
-    // Simulasi login autentikasi
-    setUser({
-      id: 'usr-01',
-      name: role === 'admin' ? 'Tim Pengelola Green Campus' : 'Budi Pratama',
-      email,
-      role, // 'mahasiswa' atau 'admin'
-      faculty: 'Fakultas Teknik'
-    });
+  const login = (userRole) => {
+    localStorage.setItem('ecodas_role', userRole);
+    setRole(userRole);
   };
 
   const logout = () => {
-    setUser(null);
+    localStorage.removeItem('ecodas_role');
+    setRole(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ role, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}

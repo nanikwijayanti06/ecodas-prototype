@@ -1,0 +1,29 @@
+.ui-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: inherit;
+}
+
+.ui-btn-primary {
+  background-color: #059669;
+  color: #fff;
+}
+.ui-btn-primary:hover { background-color: #047857; }
+
+.ui-btn-dark {
+  background-color: #0f172a;
+  color: #fff;
+}
+.ui-btn-dark:hover { background-color: #1e293b; }
+
+.ui-btn-outline {
+  background-color: #fff;
+  color: #059669;
+  border: 1px solid #059669;
+}
+.ui-btn-outline:hover { background-color: #ecfdf5; }

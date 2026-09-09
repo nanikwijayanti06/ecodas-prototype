@@ -1,0 +1,70 @@
+.sidebar-pem {
+  background-color: #1a1a2e; /* Biru/Ungu Gelap ala PEM UNY */
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+}
+
+.sidebar-pem.open { width: 250px; }
+.sidebar-pem.closed { width: 0px; overflow: hidden; }
+
+.sidebar-logo-container {
+  padding: 20px;
+  text-align: center;
+  background-color: white; /* Supaya logo hijaunya terlihat */
+}
+
+.sidebar-logo {
+  width: 120px;
+  height: auto;
+}
+
+.sidebar-menu-title {
+  padding: 15px 20px 5px;
+  font-size: 11px;
+  color: #6c7293;
+  letter-spacing: 1px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1; /* Supaya menu mengambil sisa ruang dan mendorong logout ke bawah */
+}
+
+.sidebar-nav li a {
+  display: block;
+  padding: 12px 20px;
+  color: #a1a5b7; /* Warna teks abu-abu terang */
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a.active {
+  background-color: #2b2b40;
+  color: white;
+  border-left: 4px solid #05b875; /* Garis aktif hijau */
+}
+
+.sidebar-footer {
+  padding: 20px;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: #ef4444; /* Merah untuk log out */
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #ef4444;
+  color: white;
+}

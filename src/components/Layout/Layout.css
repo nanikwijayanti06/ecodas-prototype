@@ -1,0 +1,45 @@
+/* Kerangka Utama (Membungkus seluruh layar) */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Supaya layout tidak goyang */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #f4f6f9; /* Warna abu-abu terang ala background PEM UNY */
+}
+
+/* Bagian Kanan (Area Navbar + Konten + Footer) */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Area Konten Utama (Tempat Outlet dirender) */
+.app-content {
+  flex: 1;
+  overflow-y: auto; /* Agar area ini bisa di-scroll jika isinya panjang */
+  padding: 24px;
+}
+
+/* =========================================
+   PANDUAN UNTUK KOMPONEN SIDEBAR & NAVBAR
+   (Ini akan diterapkan di dalam Sidebar.css & Navbar.css milikmu)
+   ========================================= */
+
+/* Untuk Sidebar (Bisa kamu aplikasikan di Sidebar.jsx) */
+.sidebar-pem-uny {
+  background-color: #1a1a2e; /* Warna ungu/biru gelap PEM UNY */
+  color: white;
+  transition: width 0.3s ease;
+}
+
+/* Untuk Navbar (Bisa kamu aplikasikan di Navbar.jsx) */
+.navbar-pem-uny {
+  background-color: #05b875; /* Warna hijau tosca PEM UNY */
+  color: white;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}

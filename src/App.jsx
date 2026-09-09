@@ -1,89 +1,36 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AppLayout from './components/Layout/AppLayout';
+import Login from './pages/auth/Login';
+import Dashboard from './pages/mahasiswa/Dashboard';
+import L1_Awareness from './pages/mahasiswa/L1_Awareness';
+import L2_Tracker from './pages/mahasiswa/L2_Tracker';
+import L3_Behavior from './pages/mahasiswa/L3_Behavior';
+import L4_CollectiveDashboard from './pages/admin/L4_CollectiveDashboard';
+import L5_DecisionSupport from './pages/admin/L5_DecisionSupport';
+import Settings from './pages/settings/Settings';
 
-import Navbar from "./components/Navbar";
-
-import Home from "./pages/Home";
-import Awareness from "./pages/Awareness";
-import Tracker from "./pages/Tracker";
-import Behavior from "./pages/Behavior";
-import CollectiveIntelligence from "./pages/CollectiveIntelligence";
-import DecisionSupport from "./pages/DecisionSupport";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
-import Login from "./pages/Login";
-
-function App() {
+export default function App() {
   return (
-    <Router>
-      <div style={styles.appContainer}>
+    <Routes>
+      <Route path="/login" element={<Login />} />
 
-        {/* SIDEBAR */}
-        <Navbar />
+      {/* area mahasiswa (layer 1-3 framework Bijak-M) */}
+      <Route element={<AppLayout allowedRole="mahasiswa" />}>
+        <Route path="/mahasiswa/dashboard" element={<Dashboard />} />
+        <Route path="/mahasiswa/awareness" element={<L1_Awareness />} />
+        <Route path="/mahasiswa/tracker" element={<L2_Tracker />} />
+        <Route path="/mahasiswa/behavior" element={<L3_Behavior />} />
+        <Route path="/mahasiswa/settings" element={<Settings />} />
+      </Route>
 
-        {/* MAIN CONTENT */}
-        <main style={styles.mainContent}>
-          <Routes>
+      {/* area admin (layer 4-5 framework Bijak-M) */}
+      <Route element={<AppLayout allowedRole="admin" />}>
+        <Route path="/admin/dashboard" element={<L4_CollectiveDashboard />} />
+        <Route path="/admin/decision" element={<L5_DecisionSupport />} />
+        <Route path="/admin/settings" element={<Settings />} />
+      </Route>
 
-            {/* HOME / DASHBOARD */}
-            <Route path="/" element={<Home />} />
-
-            {/* LAYER 1 - AWARENESS */}
-            <Route path="/awareness" element={<Awareness />} />
-
-            {/* LAYER 2 - FEEDBACK MECHANISM / TRACKER */}
-            <Route path="/tracker" element={<Tracker />} />
-
-            {/* LAYER 3 - BEHAVIOR CHANGE */}
-            <Route path="/behavior" element={<Behavior />} />
-
-            {/* LAYER 4 - COLLECTIVE INTELLIGENCE */}
-            <Route
-              path="/collective-intelligence"
-              element={<CollectiveIntelligence />}
-            />
-
-            {/* LAYER 5 - DECISION SUPPORT */}
-            <Route
-              path="/decision-support"
-              element={<DecisionSupport />}
-            />
-
-            {/* DASHBOARD LAMA */}
-            <Route path="/dashboard" element={<Dashboard />} />
-
-            {/* PROFILE */}
-            <Route path="/profile" element={<Profile />} />
-
-            {/* LOGIN */}
-            <Route path="/login" element={<Login />} />
-
-          </Routes>
-        </main>
-
-      </div>
-    </Router>
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
 }
-
-const styles = {
-  appContainer: {
-    margin: 0,
-    padding: 0,
-    minHeight: "100vh",
-    backgroundColor: "#f8fafc",
-    position: "relative",
-    fontFamily: '"Inter", "Segoe UI", sans-serif',
-  },
-
-  mainContent: {
-    marginLeft: "260px",
-    minHeight: "100vh",
-    width: "calc(100% - 260px)",
-    padding: "0",
-    boxSizing: "border-box",
-    overflowX: "hidden",
-  },
-};
-
-export default App;
