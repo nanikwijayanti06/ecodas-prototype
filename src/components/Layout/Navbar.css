@@ -1,23 +1,136 @@
-.navbar-pem {
-  background-color: #05b875; /* Hijau tosca ala PEM UNY */
-  color: white;
-  height: 60px;
+/* Container Utama */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e1e3e6;
+  height: 64px;
+  box-sizing: border-box;
+}
+
+/* Bagian Kiri */
+.navbar-left {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  gap: 24px;
 }
 
-.toggle-btn {
-  background: transparent;
+.nav-toggle-btn {
+  background: none;
   border: none;
-  color: white;
-  font-size: 24px;
   cursor: pointer;
+  color: #1f1f1f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
 }
 
-.user-text {
+.nav-toggle-btn:hover {
+  background-color: #f5f5f7;
+}
+
+/* Link Horizontal (Mirip Flights, Cars, Stays) */
+.navbar-top-links {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar-top-links a {
+  text-decoration: none;
+  color: #4a4a4a;
   font-size: 14px;
   font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navbar-top-links a:hover {
+  color: #007a5e; /* Warna hijau khas Ecodas */
+}
+
+.navbar-top-links a.active {
+  color: #007a5e;
+  font-weight: 700;
+}
+
+/* Bagian Kanan */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #1f1f1f;
+  font-weight: 500;
+}
+
+.text-link {
+  text-decoration: none;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* Kapsul Profil Kanan Atas */
+.profile-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #ffffff;
+  border: 1px solid #cbd0d5;
+  border-radius: 30px;
+  padding: 4px 6px 4px 16px;
+  cursor: pointer;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.profile-pill:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border-color: #a0a5aa;
+}
+
+.profile-role {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f1f1f;
+  text-transform: capitalize;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background-color: #f5f5f7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6e6e73;
+}
+
+/* Responsif untuk HP (Menyembunyikan menu teks agar tidak penuh) */
+@media (max-width: 768px) {
+  .hidden-mobile {
+    display: none;
+  }
+  .navbar-top-links {
+    display: none;
+  }
+  .navbar-container {
+    padding: 12px 16px;
+  }
+  .navbar-right {
+    gap: 12px;
+  }
 }

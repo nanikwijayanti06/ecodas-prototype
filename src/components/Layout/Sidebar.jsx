@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -6,21 +6,25 @@ import {
   Compass, 
   Activity, 
   User, 
-  LogOut 
+  LogOut,
+  HelpCircle,
+  Menu,
+  X
 } from 'lucide-react';
 import './Sidebar.css';
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(true); // State untuk buka tutup sidebar
 
-  // Fungsi Log Out yang Benar
   const handleLogout = () => {
-    // 1. Hapus data login dari browser
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    
-    // 2. Lempar pengguna kembali ke halaman Login
     navigate('/login', { replace: true });
+  };
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
   };
 
   const menuItems = [
@@ -32,43 +36,65 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="sidebar-container">
-      {/* Logo Ecodas */}
-      <div className="sidebar-logo">
-        <img src="/src/assets/images/logo.png" alt="Ecodas Logo" className="logo-img" onError={(e) => e.target.style.display = 'none'} />
-        <span className="logo-text">Ecodas</span>
-      </div>
+    <>
+      {/* Tombol Hamburger untuk Mobile */}
+      <button className="mobile-toggle" onClick={toggleSidebar}>
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
 
-      <div className="sidebar-menu-wrapper">
-        <p className="menu-title">MENU UTAMA</p>
-        
-        {/* Navigasi Menu */}
-        <nav className="sidebar-nav">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) => 
-                  `nav-item ${isActive ? 'nav-item-active' : ''}`
-                }
-              >
-                <Icon className="nav-icon" />
-                <span>{item.label}</span>
-              </NavLink>
-            );
-          })}
-        </nav>
-      </div>
+      {/* Overlay gelap jika sidebar terbuka di mobile */}
+      {isOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
 
-      {/* Tombol Log Out di Bawah */}
-      <div className="sidebar-footer">
-        <button onClick={handleLogout} className="logout-btn">
-          <LogOut className="w-4 h-4" />
-          <span>Log out</span>
-        </button>
-      </div>
-    </aside>
+      <aside className={`sidebar-container ${isOpen ? 'open' : 'closed'}`}>
+        {/* Header / Logo */}
+        <div className="sidebar-header">
+          <div className="sidebar-logo">
+            {/* Ganti dengan logo Ecodas kamu */}
+            <div className="logo-placeholder">E</div> 
+            <span className="logo-text">Ecodas</span>
+          </div>
+        </div>
+
+        {/* Menu Utama */}
+        <div className="sidebar-menu-wrapper">
+          <nav className="sidebar-nav">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => window.innerWidth <= 768 && setIsOpen(false)} // Otomatis tutup di mobile saat diklik
+                  className={({ isActive }) => 
+                    `nav-item ${isActive ? 'nav-item-active' : ''}`
+                  }
+                >
+                  <Icon className="nav-icon" size={20} />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Footer (Bawah) - Mirip Grammarly */}
+        <div className="sidebar-footer">
+          <div className="footer-divider"></div>
+          
+          <button className="nav-item footer-item">
+            <HelpCircle className="nav-icon" size={20} />
+            <span>Support</span>
+          </button>
+          
+          <button onClick={handleLogout} className="nav-item footer-item text-danger">
+            <LogOut className="nav-icon" size={20} />
+            <div className="logout-text">
+              <span>Sign out</span>
+              <span className="logout-email">user@ecodas.co</span>
+            </div>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
