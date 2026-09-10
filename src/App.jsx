@@ -1,13 +1,14 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import AppLayout from './components/Layout/AppLayout';
-import Login from './pages/auth/Login';
-import Dashboard from './pages/mahasiswa/Dashboard';
-import L1_Awareness from './pages/mahasiswa/L1_Awareness';
-import L2_Tracker from './pages/mahasiswa/L2_Tracker';
-import L3_Behavior from './pages/mahasiswa/L3_Behavior';
-import L4_CollectiveDashboard from './pages/admin/L4_CollectiveDashboard';
-import L5_DecisionSupport from './pages/admin/L5_DecisionSupport';
-import Settings from './pages/settings/Settings';
+import { Routes, Route, Navigate } from "react-router-dom";
+import AppLayout from "./components/Layout/AppLayout";
+import Login from "./pages/auth/Login";
+import Dashboard from "./pages/mahasiswa/Dashboard";
+import L1_Awareness from "./pages/mahasiswa/L1_Awareness";
+import L2_Tracker from "./pages/mahasiswa/L2_Tracker";
+import L3_Behavior from "./pages/mahasiswa/L3_Behavior";
+import Profile from "./pages/mahasiswa/Profile"; // 1. TAMBAHKAN IMPORT INI
+import L4_CollectiveDashboard from "./pages/admin/L4_CollectiveDashboard";
+import L5_DecisionSupport from "./pages/admin/L5_DecisionSupport";
+import Settings from "./pages/settings/Settings";
 
 export default function App() {
   return (
@@ -20,6 +21,8 @@ export default function App() {
         <Route path="/mahasiswa/awareness" element={<L1_Awareness />} />
         <Route path="/mahasiswa/tracker" element={<L2_Tracker />} />
         <Route path="/mahasiswa/behavior" element={<L3_Behavior />} />
+        <Route path="/mahasiswa/profile" element={<Profile />} />{" "}
+        {/* 2. TAMBAHKAN RUTE INI */}
         <Route path="/mahasiswa/settings" element={<Settings />} />
       </Route>
 

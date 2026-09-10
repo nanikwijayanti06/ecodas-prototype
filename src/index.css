@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Kalau di bawahnya ada kode CSS bawaan Vite, biarkan saja atau boleh dihapus */
 * { box-sizing: border-box; }
 
 body {

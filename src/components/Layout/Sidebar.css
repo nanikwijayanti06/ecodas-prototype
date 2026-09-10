@@ -1,70 +1,109 @@
-.sidebar-pem {
-  background-color: #1a1a2e; /* Biru/Ungu Gelap ala PEM UNY */
-  color: white;
+/* Container Sidebar Utama */
+.sidebar-container {
+  width: 240px;
   height: 100vh;
+  background-color: #ffffff; /* Background Putih */
+  border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
-  transition: width 0.3s ease;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 0;
 }
 
-.sidebar-pem.open { width: 250px; }
-.sidebar-pem.closed { width: 0px; overflow: hidden; }
-
-.sidebar-logo-container {
-  padding: 20px;
-  text-align: center;
-  background-color: white; /* Supaya logo hijaunya terlihat */
-}
-
+/* Logo Section */
 .sidebar-logo {
-  width: 120px;
-  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 0.5rem;
+  margin-bottom: 2rem;
 }
 
-.sidebar-menu-title {
-  padding: 15px 20px 5px;
+.logo-img {
+  height: 32px;
+  width: auto;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #007A5e;
+}
+
+/* Section Title */
+.menu-title {
   font-size: 11px;
-  color: #6c7293;
-  letter-spacing: 1px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  padding-left: 0.75rem;
 }
 
+/* Nav Menu Items */
 .sidebar-nav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex: 1; /* Supaya menu mengambil sisa ruang dan mendorong logout ke bawah */
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
-.sidebar-nav li a {
-  display: block;
-  padding: 12px 20px;
-  color: #a1a5b7; /* Warna teks abu-abu terang */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569; /* Warna teks default abu-abu */
   text-decoration: none;
-  font-size: 14px;
+  transition: all 0.2s ease-in-out;
 }
 
-.sidebar-nav li a:hover,
-.sidebar-nav li a.active {
-  background-color: #2b2b40;
-  color: white;
-  border-left: 4px solid #05b875; /* Garis aktif hijau */
+/* Hover State */
+.nav-item:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
+/* ACTIVE STATE: Ijo Muda saat diklik/aktif */
+.nav-item-active {
+  background-color: #e6f4f1 !important; /* Background Hijau Muda */
+  color: #007A5e !important; /* Teks Hijau Tua ECODAS */
+  font-weight: 700 !important;
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Log Out Button */
 .sidebar-footer {
-  padding: 20px;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
 }
 
 .logout-btn {
   width: 100%;
-  padding: 10px;
-  background: transparent;
-  color: #ef4444; /* Merah untuk log out */
-  border: 1px solid #ef4444;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid #fecdd3;
+  background-color: #fff1f2;
+  color: #e11d48;
+  font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .logout-btn:hover {
-  background: #ef4444;
-  color: white;
+  background-color: #ffe4e6;
+  border-color: #fda4af;
 }
