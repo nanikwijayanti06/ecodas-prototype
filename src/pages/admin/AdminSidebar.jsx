@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -17,27 +17,10 @@ import {
 import logo from "../../assets/images/logo.png";
 import "./AdminSidebar.css";
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
 
-  const [isOpen, setIsOpen] = useState(true);
   const [logoError, setLogoError] = useState(false);
-
-  /* =========================================
-     RESPONSIVE SIDEBAR
-     ========================================= */
-
-  useEffect(() => {
-    const handleToggle = () => {
-      setIsOpen((prev) => !prev);
-    };
-
-    window.addEventListener("toggle-admin-sidebar", handleToggle);
-
-    return () => {
-      window.removeEventListener("toggle-admin-sidebar", handleToggle);
-    };
-  }, []);
 
   const closeMobileSidebar = () => {
     if (window.innerWidth <= 768) {
@@ -67,22 +50,7 @@ export default function AdminSidebar() {
 
   return (
     <>
-      {/* =====================================
-          MOBILE / TOGGLE BUTTON
-          ===================================== */}
 
-      <button
-        type="button"
-        className="admin-sidebar-mobile-toggle"
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-label={isOpen ? "Tutup sidebar" : "Buka sidebar"}
-      >
-        {isOpen ? (
-          <X size={20} strokeWidth={1.8} />
-        ) : (
-          <Menu size={20} strokeWidth={1.8} />
-        )}
-      </button>
 
       {/* =====================================
           OVERLAY

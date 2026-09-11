@@ -489,10 +489,7 @@ export default function Dashboard() {
         ================================================= */}
 
         <section className="dashboard-welcome">
-          <div className="dashboard-eyebrow">
-            <span className="dashboard-eyebrow-line" />
-            Dashboard mahasiswa
-          </div>
+       
 
           <h1 className="dashboard-title">Selamat datang kembali, Nanik.</h1>
 

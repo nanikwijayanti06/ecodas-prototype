@@ -357,7 +357,6 @@ export default function L2_Tracker() {
       <section className="l2-section">
         <div className="l2-section-heading">
           <div>
-            <span>01 / IMPACT BY CATEGORY</span>
             <h2>Dari mana dampaknya berasal?</h2>
           </div>
 
@@ -425,7 +424,6 @@ export default function L2_Tracker() {
       <section className="l2-analysis-grid">
         <div className="l2-progress-panel">
           <div className="l2-panel-label">
-            <span>02 / PROGRESS MONITORING</span>
             <BarChart3 size={17} />
           </div>
 
@@ -462,7 +460,6 @@ export default function L2_Tracker() {
         <div className="l2-chart-panel">
           <div className="l2-chart-header">
             <div>
-              <span>03 / CONSUMPTION TREND</span>
               <h2>Aktivitas dari waktu ke waktu</h2>
             </div>
 
@@ -654,8 +651,6 @@ export default function L2_Tracker() {
         </div>
 
         <div className="l2-feedback-content">
-          <span>05 / ACTIONABLE FEEDBACK</span>
-
           <h2>Apa yang bisa kamu lakukan berikutnya?</h2>
 
           <p>
@@ -685,8 +680,6 @@ export default function L2_Tracker() {
       {/* COMPARATIVE FEEDBACK */}
       <section className="l2-comparison-section">
         <div>
-          <span>06 / COMPARATIVE FEEDBACK</span>
-
           <h2>Lihat perubahan, bukan sekadar angka.</h2>
         </div>
 

@@ -1,0 +1,52 @@
+/* =========================================
+   ADMIN LAYOUT
+   ========================================= */
+
+.admin-layout {
+  min-height: 100vh;
+  background: #f5f7f3;
+}
+
+
+/* =========================================
+   MAIN AREA
+   Offset by sidebar width (258px)
+   ========================================= */
+
+.admin-main {
+  min-height: 100vh;
+  margin-left: 258px;
+  transition: margin-left 0.25s ease;
+}
+
+
+/* When sidebar is closed, remove offset */
+.admin-layout.admin-sidebar-is-closed .admin-main {
+  margin-left: 0;
+}
+
+
+/* =========================================
+   CONTENT AREA
+   ========================================= */
+
+.admin-content {
+  padding: 28px 32px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 768px) {
+  .admin-main {
+    margin-left: 0;
+  }
+
+  .admin-content {
+    padding: 20px 16px;
+  }
+}

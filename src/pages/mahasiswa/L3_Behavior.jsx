@@ -38,10 +38,10 @@ const STORAGE_GOALS = "ecodas_behavior_goals";
 const carbonByActivity = {
   "Membawa tumbler": 0.18,
   "Menggunakan reusable bag": 0.12,
-  "Menghindari botol plastik sekali pakai": 0.20,
+  "Menghindari botol plastik sekali pakai": 0.2,
   "Menggunakan transportasi umum": 0.65,
   "Berjalan kaki ke kampus": 0.72,
-  "Bersepeda ke kampus": 0.70,
+  "Bersepeda ke kampus": 0.7,
   "Mengurangi penggunaan AC": 0.35,
   "Mematikan perangkat setelah digunakan": 0.16,
   "Memilih makanan tanpa kemasan sekali pakai": 0.22,
@@ -61,7 +61,7 @@ const activityOptions = [
   {
     label: "Menghindari botol plastik sekali pakai",
     category: "Plastik & Kemasan",
-    carbon: 0.20,
+    carbon: 0.2,
   },
   {
     label: "Menggunakan transportasi umum",
@@ -76,7 +76,7 @@ const activityOptions = [
   {
     label: "Bersepeda ke kampus",
     category: "Transportasi",
-    carbon: 0.70,
+    carbon: 0.7,
   },
   {
     label: "Mengurangi penggunaan AC",
@@ -152,9 +152,7 @@ function getLastSevenDays() {
 }
 
 function createId(prefix = "id") {
-  return `${prefix}_${Date.now()}_${Math.random()
-    .toString(36)
-    .slice(2, 8)}`;
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
 /* ---------------------------------------------------------
@@ -294,31 +292,30 @@ export default function L3_Behavior() {
 
   const completedActions = useMemo(
     () => actions.filter((action) => action.completed),
-    [actions]
+    [actions],
   );
 
   const totalCarbon = useMemo(
     () =>
       completedActions.reduce(
         (sum, action) => sum + Number(action.carbon || 0),
-        0
+        0,
       ),
-    [completedActions]
+    [completedActions],
   );
 
   const todayActions = useMemo(
     () => actions.filter((action) => action.date === today),
-    [actions, today]
+    [actions, today],
   );
 
   const weeklyActions = useMemo(
-    () =>
-      actions.filter((action) => lastSevenDays.includes(action.date)),
-    [actions, lastSevenDays]
+    () => actions.filter((action) => lastSevenDays.includes(action.date)),
+    [actions, lastSevenDays],
   );
 
   const weeklyCompleted = weeklyActions.filter(
-    (action) => action.completed
+    (action) => action.completed,
   ).length;
 
   const activeGoals = goals.filter((goal) => goal.active);
@@ -328,8 +325,8 @@ export default function L3_Behavior() {
       ? Math.min(
           100,
           Math.round(
-            (weeklyCompleted / Math.max(activeGoals.length * 5, 1)) * 100
-          )
+            (weeklyCompleted / Math.max(activeGoals.length * 5, 1)) * 100,
+          ),
         )
       : 0;
 
@@ -338,8 +335,8 @@ export default function L3_Behavior() {
     new Set(
       completedActions
         .filter((action) => action.date)
-        .map((action) => action.date)
-    ).size
+        .map((action) => action.date),
+    ).size,
   );
 
   /* -------------------------------------------------------
@@ -348,7 +345,7 @@ export default function L3_Behavior() {
 
   const chartData = lastSevenDays.map((date) => {
     const count = actions.filter(
-      (action) => action.date === date && action.completed
+      (action) => action.date === date && action.completed,
     ).length;
 
     return {
@@ -358,10 +355,7 @@ export default function L3_Behavior() {
     };
   });
 
-  const maxChart = Math.max(
-    ...chartData.map((item) => item.count),
-    1
-  );
+  const maxChart = Math.max(...chartData.map((item) => item.count), 1);
 
   /* -------------------------------------------------------
      Goal progress
@@ -398,8 +392,7 @@ export default function L3_Behavior() {
     });
 
     return matchedActions.filter(
-      (action) =>
-        action.completed && lastSevenDays.includes(action.date)
+      (action) => action.completed && lastSevenDays.includes(action.date),
     ).length;
   }
 
@@ -428,14 +421,12 @@ export default function L3_Behavior() {
 
   function deleteAction(id) {
     const confirmed = window.confirm(
-      "Hapus tindakan ini? Data bukti dan progres tindakan juga akan dihapus."
+      "Hapus tindakan ini? Data bukti dan progres tindakan juga akan dihapus.",
     );
 
     if (!confirmed) return;
 
-    setActions((current) =>
-      current.filter((action) => action.id !== id)
-    );
+    setActions((current) => current.filter((action) => action.id !== id));
 
     if (selectedAction?.id === id) {
       setSelectedAction(null);
@@ -452,8 +443,8 @@ export default function L3_Behavior() {
               ...action,
               completed: !action.completed,
             }
-          : action
-      )
+          : action,
+      ),
     );
   }
 
@@ -465,8 +456,7 @@ export default function L3_Behavior() {
       return;
     }
 
-    const carbon =
-      carbonByActivity[actionForm.activity] || 0;
+    const carbon = carbonByActivity[actionForm.activity] || 0;
 
     if (editAction) {
       setActions((current) =>
@@ -477,8 +467,8 @@ export default function L3_Behavior() {
                 ...actionForm,
                 carbon,
               }
-            : action
-        )
+            : action,
+        ),
       );
     } else {
       const newAction = {
@@ -520,15 +510,11 @@ export default function L3_Behavior() {
   }
 
   function deleteGoal(id) {
-    const confirmed = window.confirm(
-      "Hapus goal ini?"
-    );
+    const confirmed = window.confirm("Hapus goal ini?");
 
     if (!confirmed) return;
 
-    setGoals((current) =>
-      current.filter((goal) => goal.id !== id)
-    );
+    setGoals((current) => current.filter((goal) => goal.id !== id));
 
     setMenuGoal(null);
   }
@@ -541,8 +527,8 @@ export default function L3_Behavior() {
               ...goal,
               active: !goal.active,
             }
-          : goal
-      )
+          : goal,
+      ),
     );
 
     setMenuGoal(null);
@@ -565,8 +551,8 @@ export default function L3_Behavior() {
                 ...goalForm,
                 target: Number(goalForm.target),
               }
-            : goal
-        )
+            : goal,
+        ),
       );
     } else {
       const newGoal = {
@@ -620,9 +606,7 @@ export default function L3_Behavior() {
      ------------------------------------------------------- */
 
   function handleActivityChange(value) {
-    const selected = activityOptions.find(
-      (item) => item.label === value
-    );
+    const selected = activityOptions.find((item) => item.label === value);
 
     setActionForm((current) => ({
       ...current,
@@ -643,14 +627,13 @@ export default function L3_Behavior() {
 
       <section className="l3-header">
         <div>
-          <div className="l3-eyebrow">
-          </div>
+          <div className="l3-eyebrow"></div>
 
           <h1>Turn intention into action.</h1>
 
           <p>
-            Bangun kebiasaan konsumsi berkelanjutan melalui
-            target, tindakan, bukti, dan pemantauan progres.
+            Bangun kebiasaan konsumsi berkelanjutan melalui target, tindakan,
+            bukti, dan pemantauan progres.
           </p>
         </div>
 
@@ -672,14 +655,10 @@ export default function L3_Behavior() {
         <div className="l3-today-panel">
           <div className="l3-panel-heading">
             <div>
-              <span className="l3-small-label">
-                TODAY'S ACTION
-              </span>
+              <span className="l3-small-label">TODAY'S ACTION</span>
 
               <h2>
-                {todayActions.filter(
-                  (action) => action.completed
-                ).length}{" "}
+                {todayActions.filter((action) => action.completed).length}{" "}
                 completed
               </h2>
             </div>
@@ -698,13 +677,8 @@ export default function L3_Behavior() {
             {todayActions.length === 0 ? (
               <div className="l3-empty-state">
                 <Leaf size={22} />
-                <p>
-                  Belum ada tindakan hari ini.
-                </p>
-                <button
-                  type="button"
-                  onClick={openCreateAction}
-                >
+                <p>Belum ada tindakan hari ini.</p>
+                <button type="button" onClick={openCreateAction}>
                   Tambahkan tindakan
                 </button>
               </div>
@@ -712,52 +686,32 @@ export default function L3_Behavior() {
               todayActions.map((action) => (
                 <div
                   className={`l3-action-row ${
-                    action.completed
-                      ? "is-completed"
-                      : ""
+                    action.completed ? "is-completed" : ""
                   }`}
                   key={action.id}
                 >
                   <button
                     type="button"
-                    className={`l3-check ${
-                      action.completed
-                        ? "checked"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      toggleAction(action.id)
-                    }
+                    className={`l3-check ${action.completed ? "checked" : ""}`}
+                    onClick={() => toggleAction(action.id)}
                     aria-label={
-                      action.completed
-                        ? "Mark incomplete"
-                        : "Mark complete"
+                      action.completed ? "Mark incomplete" : "Mark complete"
                     }
                   >
-                    {action.completed && (
-                      <Check size={15} />
-                    )}
+                    {action.completed && <Check size={15} />}
                   </button>
 
                   <div
                     className="l3-action-main"
-                    onClick={() =>
-                      setSelectedAction(action)
-                    }
+                    onClick={() => setSelectedAction(action)}
                   >
-                    <strong>
-                      {action.activity}
-                    </strong>
+                    <strong>{action.activity}</strong>
 
-                    <span>
-                      {action.category}
-                    </span>
+                    <span>{action.category}</span>
                   </div>
 
                   <div className="l3-action-impact">
-                    <span>
-                      ↓ {Number(action.carbon).toFixed(2)}
-                    </span>
+                    <span>↓ {Number(action.carbon).toFixed(2)}</span>
                     <small>kg CO₂e</small>
                   </div>
 
@@ -765,11 +719,7 @@ export default function L3_Behavior() {
                     type="button"
                     className="l3-more-button"
                     onClick={() =>
-                      setMenuAction(
-                        menuAction === action.id
-                          ? null
-                          : action.id
-                      )
+                      setMenuAction(menuAction === action.id ? null : action.id)
                     }
                   >
                     <MoreHorizontal size={18} />
@@ -779,9 +729,7 @@ export default function L3_Behavior() {
                     <div className="l3-context-menu">
                       <button
                         type="button"
-                        onClick={() =>
-                          openEditAction(action)
-                        }
+                        onClick={() => openEditAction(action)}
                       >
                         <Edit3 size={15} />
                         Edit
@@ -790,9 +738,7 @@ export default function L3_Behavior() {
                       <button
                         type="button"
                         className="danger"
-                        onClick={() =>
-                          deleteAction(action.id)
-                        }
+                        onClick={() => deleteAction(action.id)}
                       >
                         <Trash2 size={15} />
                         Delete
@@ -808,13 +754,9 @@ export default function L3_Behavior() {
         {/* WEEKLY PROGRESS */}
 
         <div className="l3-progress-panel">
-          <div className="l3-small-label">
-            THIS WEEK
-          </div>
+          <div className="l3-small-label">THIS WEEK</div>
 
-          <div className="l3-progress-number">
-            {weeklyCompletion}%
-          </div>
+          <div className="l3-progress-number">{weeklyCompletion}%</div>
 
           <div className="l3-progress-track">
             <span
@@ -825,26 +767,18 @@ export default function L3_Behavior() {
           </div>
 
           <div className="l3-progress-meta">
-            <span>
-              {weeklyCompleted} completed actions
-            </span>
+            <span>{weeklyCompleted} completed actions</span>
 
-            <span>
-              {activeGoals.length} active goals
-            </span>
+            <span>{activeGoals.length} active goals</span>
           </div>
 
           <div className="l3-impact-summary">
             <Leaf size={18} />
 
             <div>
-              <strong>
-                {totalCarbon.toFixed(2)} kg CO₂e
-              </strong>
+              <strong>{totalCarbon.toFixed(2)} kg CO₂e</strong>
 
-              <span>
-                estimated reduction recorded
-              </span>
+              <span>estimated reduction recorded</span>
             </div>
           </div>
         </div>
@@ -879,13 +813,10 @@ export default function L3_Behavior() {
             <div className="l3-large-empty">
               <Target size={28} />
 
-              <h3>
-                Belum ada behavior goal
-              </h3>
+              <h3>Belum ada behavior goal</h3>
 
               <p>
-                Buat target sederhana yang ingin kamu
-                ubah menjadi kebiasaan.
+                Buat target sederhana yang ingin kamu ubah menjadi kebiasaan.
               </p>
 
               <button
@@ -902,20 +833,12 @@ export default function L3_Behavior() {
               const progress = getGoalProgress(goal);
               const percentage = Math.min(
                 100,
-                Math.round(
-                  (progress /
-                    Math.max(Number(goal.target), 1)) *
-                    100
-                )
+                Math.round((progress / Math.max(Number(goal.target), 1)) * 100),
               );
 
               return (
                 <article
-                  className={`l3-goal-row ${
-                    goal.active
-                      ? ""
-                      : "is-paused"
-                  }`}
+                  className={`l3-goal-row ${goal.active ? "" : "is-paused"}`}
                   key={goal.id}
                 >
                   <div className="l3-goal-number">
@@ -927,22 +850,15 @@ export default function L3_Behavior() {
                       <div>
                         <h3>{goal.title}</h3>
 
-                        <p>
-                          {goal.description ||
-                            "Behavior goal"}
-                        </p>
+                        <p>{goal.description || "Behavior goal"}</p>
                       </div>
 
                       <span
                         className={`l3-status ${
-                          goal.active
-                            ? "active"
-                            : "paused"
+                          goal.active ? "active" : "paused"
                         }`}
                       >
-                        {goal.active
-                          ? "Active"
-                          : "Paused"}
+                        {goal.active ? "Active" : "Paused"}
                       </span>
                     </div>
 
@@ -952,33 +868,14 @@ export default function L3_Behavior() {
                           (action) =>
                             action.completed &&
                             action.date === date &&
-                            action.category ===
-                              goal.category
+                            action.category === goal.category,
                         );
 
                         return (
-                          <div
-                            key={date}
-                            className={
-                              done
-                                ? "done"
-                                : ""
-                            }
-                          >
-                            <span>
-                              {getDayName(date).slice(
-                                0,
-                                2
-                              )}
-                            </span>
+                          <div key={date} className={done ? "done" : ""}>
+                            <span>{getDayName(date).slice(0, 2)}</span>
 
-                            <i>
-                              {done && (
-                                <Check
-                                  size={12}
-                                />
-                              )}
-                            </i>
+                            <i>{done && <Check size={12} />}</i>
                           </div>
                         );
                       })}
@@ -994,8 +891,7 @@ export default function L3_Behavior() {
                       </div>
 
                       <span>
-                        {progress} /{" "}
-                        {goal.target} days
+                        {progress} / {goal.target} days
                       </span>
                     </div>
                   </div>
@@ -1010,25 +906,17 @@ export default function L3_Behavior() {
                       type="button"
                       className="l3-more-button"
                       onClick={() =>
-                        setMenuGoal(
-                          menuGoal === goal.id
-                            ? null
-                            : goal.id
-                        )
+                        setMenuGoal(menuGoal === goal.id ? null : goal.id)
                       }
                     >
-                      <MoreHorizontal
-                        size={18}
-                      />
+                      <MoreHorizontal size={18} />
                     </button>
 
                     {menuGoal === goal.id && (
                       <div className="l3-context-menu goal-menu">
                         <button
                           type="button"
-                          onClick={() =>
-                            openEditGoal(goal)
-                          }
+                          onClick={() => openEditGoal(goal)}
                         >
                           <Edit3 size={15} />
                           Edit goal
@@ -1036,24 +924,16 @@ export default function L3_Behavior() {
 
                         <button
                           type="button"
-                          onClick={() =>
-                            toggleGoalActive(
-                              goal.id
-                            )
-                          }
+                          onClick={() => toggleGoalActive(goal.id)}
                         >
                           <Target size={15} />
-                          {goal.active
-                            ? "Pause goal"
-                            : "Activate goal"}
+                          {goal.active ? "Pause goal" : "Activate goal"}
                         </button>
 
                         <button
                           type="button"
                           className="danger"
-                          onClick={() =>
-                            deleteGoal(goal.id)
-                          }
+                          onClick={() => deleteGoal(goal.id)}
                         >
                           <Trash2 size={15} />
                           Delete
@@ -1075,73 +955,48 @@ export default function L3_Behavior() {
       <section className="l3-section">
         <div className="l3-section-heading">
           <div>
-            <span className="l3-small-label">
-              SELF-MONITORING
-            </span>
+            <span className="l3-small-label">SELF-MONITORING</span>
 
             <h2>Action pattern</h2>
           </div>
 
-          <span className="l3-muted-label">
-            Last 7 days
-          </span>
+          <span className="l3-muted-label">Last 7 days</span>
         </div>
 
         <div className="l3-chart-panel">
           <div className="l3-chart-info">
             <div>
-              <strong>
-                {weeklyCompleted}
-              </strong>
+              <strong>{weeklyCompleted}</strong>
 
-              <span>
-                completed actions
-              </span>
+              <span>completed actions</span>
             </div>
 
             <div>
-              <strong>
-                {totalCarbon.toFixed(2)}
-              </strong>
+              <strong>{totalCarbon.toFixed(2)}</strong>
 
-              <span>
-                kg CO₂e estimated
-              </span>
+              <span>kg CO₂e estimated</span>
             </div>
           </div>
 
           <div className="l3-chart">
             {chartData.map((item) => (
-              <div
-                className="l3-chart-column"
-                key={item.date}
-              >
+              <div className="l3-chart-column" key={item.date}>
                 <div className="l3-chart-value">
-                  {item.count > 0
-                    ? item.count
-                    : ""}
+                  {item.count > 0 ? item.count : ""}
                 </div>
 
                 <div className="l3-chart-bar-wrap">
                   <div
                     className={`l3-chart-bar ${
-                      item.date === today
-                        ? "today"
-                        : ""
+                      item.date === today ? "today" : ""
                     }`}
                     style={{
-                      height: `${
-                        (item.count /
-                          maxChart) *
-                        100
-                      }%`,
+                      height: `${(item.count / maxChart) * 100}%`,
                     }}
                   />
                 </div>
 
-                <span>
-                  {item.day}
-                </span>
+                <span>{item.day}</span>
               </div>
             ))}
           </div>
@@ -1163,36 +1018,27 @@ export default function L3_Behavior() {
               INFORMATION & ACTION GUIDANCE
             </span>
 
-            <h2>
-              Reduce single-use packaging
-            </h2>
+            <h2>Reduce single-use packaging</h2>
 
             <p>
-              Ubah niat menjadi langkah sederhana
-              yang bisa dilakukan dalam aktivitas
-              sehari-hari.
+              Ubah niat menjadi langkah sederhana yang bisa dilakukan dalam
+              aktivitas sehari-hari.
             </p>
 
             <div className="l3-guide-steps">
               <div>
                 <strong>01</strong>
-                <span>
-                  Bawa wadah atau tumbler sendiri.
-                </span>
+                <span>Bawa wadah atau tumbler sendiri.</span>
               </div>
 
               <div>
                 <strong>02</strong>
-                <span>
-                  Pilih opsi isi ulang jika tersedia.
-                </span>
+                <span>Pilih opsi isi ulang jika tersedia.</span>
               </div>
 
               <div>
                 <strong>03</strong>
-                <span>
-                  Catat tindakan setelah dilakukan.
-                </span>
+                <span>Catat tindakan setelah dilakukan.</span>
               </div>
             </div>
           </div>
@@ -1204,40 +1050,24 @@ export default function L3_Behavior() {
               <Bell size={19} />
             </div>
 
-            <span className="l3-small-label">
-              PROMPT & REMINDER
-            </span>
+            <span className="l3-small-label">PROMPT & REMINDER</span>
           </div>
 
           {!reminderDone ? (
             <>
-              <strong>
-                Bring your tumbler
-              </strong>
+              <strong>Bring your tumbler</strong>
 
-              <p>
-                Jangan lupa membawa tumbler sebelum
-                berangkat.
-              </p>
+              <p>Jangan lupa membawa tumbler sebelum berangkat.</p>
 
               <div className="l3-reminder-actions">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setReminderDone(true)
-                  }
-                >
+                <button type="button" onClick={() => setReminderDone(true)}>
                   Done
                 </button>
 
                 <button
                   type="button"
                   className="secondary"
-                  onClick={() =>
-                    alert(
-                      "Reminder ditunda 30 menit."
-                    )
-                  }
+                  onClick={() => alert("Reminder ditunda 30 menit.")}
                 >
                   Snooze
                 </button>
@@ -1246,9 +1076,7 @@ export default function L3_Behavior() {
           ) : (
             <div className="l3-reminder-complete">
               <Check size={18} />
-              <span>
-                Reminder completed for today.
-              </span>
+              <span>Reminder completed for today.</span>
             </div>
           )}
         </div>
@@ -1264,29 +1092,19 @@ export default function L3_Behavior() {
         </div>
 
         <div className="l3-challenge-content">
-          <span className="l3-small-label">
-            RECOGNITION & CHALLENGE
-          </span>
+          <span className="l3-small-label">RECOGNITION & CHALLENGE</span>
 
           <h2>{challenge.title}</h2>
 
-          <p>
-            {challenge.description}
-          </p>
+          <p>{challenge.description}</p>
 
           <div className="l3-challenge-dots">
             {[1, 2, 3, 4, 5].map((number) => (
               <span
                 key={number}
-                className={
-                  number <= challengeProgress
-                    ? "done"
-                    : ""
-                }
+                className={number <= challengeProgress ? "done" : ""}
               >
-                {number <= challengeProgress && (
-                  <Check size={13} />
-                )}
+                {number <= challengeProgress && <Check size={13} />}
               </span>
             ))}
           </div>
@@ -1294,17 +1112,11 @@ export default function L3_Behavior() {
 
         <div className="l3-challenge-side">
           <strong>
-            {challengeProgress} /{" "}
-            {challenge.target}
+            {challengeProgress} / {challenge.target}
           </strong>
 
           {!challengeJoined ? (
-            <button
-              type="button"
-              onClick={() =>
-                setChallengeJoined(true)
-              }
-            >
+            <button type="button" onClick={() => setChallengeJoined(true)}>
               Join challenge
             </button>
           ) : (
@@ -1326,28 +1138,19 @@ export default function L3_Behavior() {
         </div>
 
         <div>
-          <span className="l3-small-label">
-            SOCIAL ENGAGEMENT
-          </span>
+          <span className="l3-small-label">SOCIAL ENGAGEMENT</span>
 
-          <h2>
-            Campus low-waste action
-          </h2>
+          <h2>Campus low-waste action</h2>
 
           <p>
-            42 mahasiswa sedang berpartisipasi
-            dalam tindakan konsumsi berkelanjutan
-            minggu ini.
+            42 mahasiswa sedang berpartisipasi dalam tindakan konsumsi
+            berkelanjutan minggu ini.
           </p>
         </div>
 
         <button
           type="button"
-          onClick={() =>
-            alert(
-              "Kamu telah bergabung dalam Campus Action."
-            )
-          }
+          onClick={() => alert("Kamu telah bergabung dalam Campus Action.")}
         >
           Join action
           <ArrowRight size={16} />
@@ -1361,40 +1164,28 @@ export default function L3_Behavior() {
       {selectedAction && (
         <div
           className="l3-detail-overlay"
-          onClick={() =>
-            setSelectedAction(null)
-          }
+          onClick={() => setSelectedAction(null)}
         >
           <div
             className="l3-detail-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <button
               type="button"
               className="l3-modal-close"
-              onClick={() =>
-                setSelectedAction(null)
-              }
+              onClick={() => setSelectedAction(null)}
             >
               <X size={18} />
             </button>
 
-            <span className="l3-small-label">
-              ACTION DETAIL
-            </span>
+            <span className="l3-small-label">ACTION DETAIL</span>
 
-            <h2>
-              {selectedAction.activity}
-            </h2>
+            <h2>{selectedAction.activity}</h2>
 
             <div className="l3-detail-meta">
               <span>
                 <CalendarDays size={15} />
-                {formatDate(
-                  selectedAction.date
-                )}
+                {formatDate(selectedAction.date)}
               </span>
 
               <span>
@@ -1412,32 +1203,22 @@ export default function L3_Behavior() {
             ) : (
               <div className="l3-no-proof">
                 <ImagePlus size={24} />
-                <span>
-                  Belum ada bukti foto.
-                </span>
+                <span>Belum ada bukti foto.</span>
               </div>
             )}
 
             <div className="l3-detail-impact">
-              <span>
-                Estimated carbon reduction
-              </span>
+              <span>Estimated carbon reduction</span>
 
               <strong>
-                ↓{" "}
-                {Number(
-                  selectedAction.carbon
-                ).toFixed(2)}{" "}
-                kg CO₂e
+                ↓ {Number(selectedAction.carbon).toFixed(2)} kg CO₂e
               </strong>
             </div>
 
             {selectedAction.note && (
               <div className="l3-note-box">
                 <span>Note</span>
-                <p>
-                  {selectedAction.note}
-                </p>
+                <p>{selectedAction.note}</p>
               </div>
             )}
           </div>
@@ -1451,22 +1232,16 @@ export default function L3_Behavior() {
       {actionModal && (
         <div
           className="l3-modal-backdrop"
-          onClick={() =>
-            setActionModal(false)
-          }
+          onClick={() => setActionModal(false)}
         >
           <div
             className="l3-form-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="l3-modal-header">
               <div>
                 <span className="l3-small-label">
-                  {editAction
-                    ? "EDIT ACTION"
-                    : "INSERT BEHAVIOR ACTION"}
+                  {editAction ? "EDIT ACTION" : "INSERT BEHAVIOR ACTION"}
                 </span>
 
                 <h2>
@@ -1479,42 +1254,26 @@ export default function L3_Behavior() {
               <button
                 type="button"
                 className="l3-modal-close"
-                onClick={() =>
-                  setActionModal(false)
-                }
+                onClick={() => setActionModal(false)}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form
-              onSubmit={handleActionSubmit}
-              className="l3-form"
-            >
+            <form onSubmit={handleActionSubmit} className="l3-form">
               <label>
                 What did you do?
                 <select
                   value={actionForm.activity}
-                  onChange={(event) =>
-                    handleActivityChange(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => handleActivityChange(event.target.value)}
                 >
-                  <option value="">
-                    Select an activity
-                  </option>
+                  <option value="">Select an activity</option>
 
-                  {activityOptions.map(
-                    (item) => (
-                      <option
-                        key={item.label}
-                        value={item.label}
-                      >
-                        {item.label}
-                      </option>
-                    )
-                  )}
+                  {activityOptions.map((item) => (
+                    <option key={item.label} value={item.label}>
+                      {item.label}
+                    </option>
+                  ))}
                 </select>
               </label>
 
@@ -1522,34 +1281,21 @@ export default function L3_Behavior() {
                 <label>
                   Category
                   <select
-                    value={
-                      actionForm.category
-                    }
+                    value={actionForm.category}
                     onChange={(event) =>
-                      setActionForm(
-                        (current) => ({
-                          ...current,
-                          category:
-                            event.target
-                              .value,
-                        })
-                      )
+                      setActionForm((current) => ({
+                        ...current,
+                        category: event.target.value,
+                      }))
                     }
                   >
-                    <option value="">
-                      Select category
-                    </option>
+                    <option value="">Select category</option>
 
-                    {categoryOptions.map(
-                      (category) => (
-                        <option
-                          key={category}
-                          value={category}
-                        >
-                          {category}
-                        </option>
-                      )
-                    )}
+                    {categoryOptions.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
                   </select>
                 </label>
 
@@ -1559,13 +1305,10 @@ export default function L3_Behavior() {
                     type="date"
                     value={actionForm.date}
                     onChange={(event) =>
-                      setActionForm(
-                        (current) => ({
-                          ...current,
-                          date: event.target
-                            .value,
-                        })
-                      )
+                      setActionForm((current) => ({
+                        ...current,
+                        date: event.target.value,
+                      }))
                     }
                   />
                 </label>
@@ -1575,17 +1318,10 @@ export default function L3_Behavior() {
                 <Leaf size={18} />
 
                 <div>
-                  <span>
-                    Estimated impact
-                  </span>
+                  <span>Estimated impact</span>
 
                   <strong>
-                    ↓{" "}
-                    {(
-                      carbonByActivity[
-                        actionForm.activity
-                      ] || 0
-                    ).toFixed(2)}{" "}
+                    ↓ {(carbonByActivity[actionForm.activity] || 0).toFixed(2)}{" "}
                     kg CO₂e
                   </strong>
                 </div>
@@ -1595,40 +1331,26 @@ export default function L3_Behavior() {
 
               <div className="l3-proof-field">
                 <div className="l3-proof-label">
-                  <span>
-                    Proof of action
-                  </span>
+                  <span>Proof of action</span>
 
-                  <small>
-                    Optional · JPG/PNG · max 3 MB
-                  </small>
+                  <small>Optional · JPG/PNG · max 3 MB</small>
                 </div>
 
                 <label className="l3-upload-box">
                   {actionForm.proof ? (
-                    <img
-                      src={actionForm.proof}
-                      alt="Preview bukti"
-                    />
+                    <img src={actionForm.proof} alt="Preview bukti" />
                   ) : (
                     <>
                       <Upload size={23} />
-                      <strong>
-                        Upload photo
-                      </strong>
-                      <span>
-                        Add visual evidence of
-                        your action
-                      </span>
+                      <strong>Upload photo</strong>
+                      <span>Add visual evidence of your action</span>
                     </>
                   )}
 
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={
-                      handleProofUpload
-                    }
+                    onChange={handleProofUpload}
                   />
                 </label>
 
@@ -1637,12 +1359,10 @@ export default function L3_Behavior() {
                     type="button"
                     className="l3-remove-proof"
                     onClick={() =>
-                      setActionForm(
-                        (current) => ({
-                          ...current,
-                          proof: "",
-                        })
-                      )
+                      setActionForm((current) => ({
+                        ...current,
+                        proof: "",
+                      }))
                     }
                   >
                     Remove photo
@@ -1655,13 +1375,10 @@ export default function L3_Behavior() {
                 <textarea
                   value={actionForm.note}
                   onChange={(event) =>
-                    setActionForm(
-                      (current) => ({
-                        ...current,
-                        note: event.target
-                          .value,
-                      })
-                    )
+                    setActionForm((current) => ({
+                      ...current,
+                      note: event.target.value,
+                    }))
                   }
                   placeholder="Ceritakan singkat tindakan yang dilakukan..."
                   rows={3}
@@ -1672,21 +1389,14 @@ export default function L3_Behavior() {
                 <button
                   type="button"
                   className="l3-cancel-button"
-                  onClick={() =>
-                    setActionModal(false)
-                  }
+                  onClick={() => setActionModal(false)}
                 >
                   Cancel
                 </button>
 
-                <button
-                  type="submit"
-                  className="l3-primary-button"
-                >
+                <button type="submit" className="l3-primary-button">
                   <Check size={17} />
-                  {editAction
-                    ? "Save changes"
-                    : "Insert action"}
+                  {editAction ? "Save changes" : "Insert action"}
                 </button>
               </div>
             </form>
@@ -1699,61 +1409,40 @@ export default function L3_Behavior() {
           ================================================= */}
 
       {goalModal && (
-        <div
-          className="l3-modal-backdrop"
-          onClick={() =>
-            setGoalModal(false)
-          }
-        >
+        <div className="l3-modal-backdrop" onClick={() => setGoalModal(false)}>
           <div
             className="l3-form-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="l3-modal-header">
               <div>
                 <span className="l3-small-label">
-                  {editGoal
-                    ? "EDIT GOAL"
-                    : "CREATE BEHAVIOR GOAL"}
+                  {editGoal ? "EDIT GOAL" : "CREATE BEHAVIOR GOAL"}
                 </span>
 
-                <h2>
-                  {editGoal
-                    ? "Edit your goal"
-                    : "Set a behavior goal"}
-                </h2>
+                <h2>{editGoal ? "Edit your goal" : "Set a behavior goal"}</h2>
               </div>
 
               <button
                 type="button"
                 className="l3-modal-close"
-                onClick={() =>
-                  setGoalModal(false)
-                }
+                onClick={() => setGoalModal(false)}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form
-              onSubmit={handleGoalSubmit}
-              className="l3-form"
-            >
+            <form onSubmit={handleGoalSubmit} className="l3-form">
               <label>
                 Goal name
                 <input
                   type="text"
                   value={goalForm.title}
                   onChange={(event) =>
-                    setGoalForm(
-                      (current) => ({
-                        ...current,
-                        title:
-                          event.target.value,
-                      })
-                    )
+                    setGoalForm((current) => ({
+                      ...current,
+                      title: event.target.value,
+                    }))
                   }
                   placeholder="Contoh: Membawa tumbler"
                 />
@@ -1764,46 +1453,31 @@ export default function L3_Behavior() {
                 <select
                   value={goalForm.category}
                   onChange={(event) =>
-                    setGoalForm(
-                      (current) => ({
-                        ...current,
-                        category:
-                          event.target.value,
-                      })
-                    )
+                    setGoalForm((current) => ({
+                      ...current,
+                      category: event.target.value,
+                    }))
                   }
                 >
-                  <option value="">
-                    Select category
-                  </option>
+                  <option value="">Select category</option>
 
-                  {categoryOptions.map(
-                    (category) => (
-                      <option
-                        key={category}
-                        value={category}
-                      >
-                        {category}
-                      </option>
-                    )
-                  )}
+                  {categoryOptions.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
                 </select>
               </label>
 
               <label>
                 What do you want to change?
                 <textarea
-                  value={
-                    goalForm.description
-                  }
+                  value={goalForm.description}
                   onChange={(event) =>
-                    setGoalForm(
-                      (current) => ({
-                        ...current,
-                        description:
-                          event.target.value,
-                      })
-                    )
+                    setGoalForm((current) => ({
+                      ...current,
+                      description: event.target.value,
+                    }))
                   }
                   placeholder="Contoh: Mengurangi penggunaan botol plastik sekali pakai."
                   rows={3}
@@ -1819,14 +1493,10 @@ export default function L3_Behavior() {
                     max="7"
                     value={goalForm.target}
                     onChange={(event) =>
-                      setGoalForm(
-                        (current) => ({
-                          ...current,
-                          target:
-                            event.target
-                              .value,
-                        })
-                      )
+                      setGoalForm((current) => ({
+                        ...current,
+                        target: event.target.value,
+                      }))
                     }
                   />
                 </label>
@@ -1835,18 +1505,12 @@ export default function L3_Behavior() {
                   Reminder
                   <input
                     type="time"
-                    value={
-                      goalForm.reminder
-                    }
+                    value={goalForm.reminder}
                     onChange={(event) =>
-                      setGoalForm(
-                        (current) => ({
-                          ...current,
-                          reminder:
-                            event.target
-                              .value,
-                        })
-                      )
+                      setGoalForm((current) => ({
+                        ...current,
+                        reminder: event.target.value,
+                      }))
                     }
                   />
                 </label>
@@ -1856,8 +1520,7 @@ export default function L3_Behavior() {
                 <CircleHelp size={17} />
 
                 <span>
-                  Buat target yang sederhana dan
-                  realistis agar mudah dipantau
+                  Buat target yang sederhana dan realistis agar mudah dipantau
                   setiap minggu.
                 </span>
               </div>
@@ -1866,21 +1529,14 @@ export default function L3_Behavior() {
                 <button
                   type="button"
                   className="l3-cancel-button"
-                  onClick={() =>
-                    setGoalModal(false)
-                  }
+                  onClick={() => setGoalModal(false)}
                 >
                   Cancel
                 </button>
 
-                <button
-                  type="submit"
-                  className="l3-primary-button"
-                >
+                <button type="submit" className="l3-primary-button">
                   <Target size={17} />
-                  {editGoal
-                    ? "Save changes"
-                    : "Create goal"}
+                  {editGoal ? "Save changes" : "Create goal"}
                 </button>
               </div>
             </form>
