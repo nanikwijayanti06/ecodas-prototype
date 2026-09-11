@@ -1,136 +1,749 @@
-/* Container Utama */
+/* =========================================================
+   ECODAS NAVBAR
+   Clean / Research Product / Student Sustainability
+   ========================================================= */
+
 .navbar-container {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  width: 100%;
+  height: 68px;
+
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px 24px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e1e3e6;
-  height: 64px;
+  justify-content: space-between;
+
+  padding: 0 28px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e7ebe7;
+
   box-sizing: border-box;
 }
 
-/* Bagian Kiri */
+
+/* =========================================================
+   LEFT
+   ========================================================= */
+
 .navbar-left {
   display: flex;
   align-items: center;
-  gap: 24px;
+  min-width: 0;
 }
 
 .nav-toggle-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #1f1f1f;
-  display: flex;
+  width: 38px;
+  height: 38px;
+
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  border-radius: 8px;
-  transition: background-color 0.2s;
+
+  margin-right: 16px;
+
+  border: 1px solid transparent;
+  border-radius: 9px;
+
+  background: transparent;
+  color: #31513e;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .nav-toggle-btn:hover {
-  background-color: #f5f5f7;
+  background: #f1f5f1;
+  border-color: #e1e8e2;
+  color: #173d29;
 }
 
-/* Link Horizontal (Mirip Flights, Cars, Stays) */
-.navbar-top-links {
+.nav-toggle-btn:active {
+  transform: translateY(1px);
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.navbar-brand {
   display: flex;
-  gap: 20px;
-}
+  align-items: center;
 
-.navbar-top-links a {
+  min-width: 0;
+
   text-decoration: none;
-  color: #4a4a4a;
-  font-size: 14px;
+  color: inherit;
+}
+
+.navbar-logo {
+  width: 34px;
+  height: 34px;
+
+  display: block;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
+}
+
+.navbar-brand-text {
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 10px;
+
+  line-height: 1;
+}
+
+.brand-name {
+  color: #173d29;
+
+  font-size: 15px;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+.brand-subtitle {
+  margin-top: 5px;
+
+  color: #8a958e;
+
+  font-size: 9px;
   font-weight: 500;
-  transition: color 0.2s;
+
+  letter-spacing: 0.01em;
+
+  white-space: nowrap;
 }
 
-.navbar-top-links a:hover {
-  color: #007a5e; /* Warna hijau khas Ecodas */
-}
 
-.navbar-top-links a.active {
-  color: #007a5e;
-  font-weight: 700;
-}
+/* =========================================================
+   RIGHT
+   ========================================================= */
 
-/* Bagian Kanan */
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 24px;
+
+  gap: 8px;
 }
 
-.nav-item {
-  display: flex;
+
+/* =========================================================
+   GENERIC ICON BUTTON
+   ========================================================= */
+
+.navbar-icon-btn {
+  position: relative;
+
+  width: 38px;
+  height: 38px;
+
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: #1f1f1f;
-  font-weight: 500;
-}
+  justify-content: center;
 
-.text-link {
-  text-decoration: none;
-}
+  border: 1px solid transparent;
+  border-radius: 9px;
 
-.text-link:hover {
-  text-decoration: underline;
-}
+  background: transparent;
+  color: #526158;
 
-/* Kapsul Profil Kanan Atas */
-.profile-pill {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: #ffffff;
-  border: 1px solid #cbd0d5;
-  border-radius: 30px;
-  padding: 4px 6px 4px 16px;
   cursor: pointer;
+
   transition:
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
-.profile-pill:hover {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  border-color: #a0a5aa;
+.navbar-icon-btn:hover,
+.navbar-icon-btn.is-open {
+  background: #f1f5f1;
+  border-color: #e1e8e2;
+  color: #173d29;
 }
 
-.profile-role {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f1f1f;
-  text-transform: capitalize;
-}
 
-.avatar-circle {
-  width: 32px;
-  height: 32px;
-  background-color: #f5f5f7;
-  border-radius: 50%;
+/* =========================================================
+   NOTIFICATION BADGE
+   ========================================================= */
+
+.notification-badge {
+  position: absolute;
+
+  top: 4px;
+  right: 3px;
+
+  min-width: 15px;
+  height: 15px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6e6e73;
+
+  padding: 0 4px;
+
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+
+  background: #d86b52;
+  color: #ffffff;
+
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1;
 }
 
-/* Responsif untuk HP (Menyembunyikan menu teks agar tidak penuh) */
-@media (max-width: 768px) {
-  .hidden-mobile {
-    display: none;
-  }
-  .navbar-top-links {
-    display: none;
-  }
+
+/* =========================================================
+   NOTIFICATION PANEL
+   ========================================================= */
+
+.navbar-action-wrapper {
+  position: relative;
+}
+
+.notification-panel {
+  position: absolute;
+
+  top: calc(100% + 11px);
+  right: -92px;
+
+  width: 390px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8e3;
+  border-radius: 14px;
+
+  box-shadow:
+    0 14px 35px rgba(26, 54, 38, 0.10),
+    0 3px 8px rgba(26, 54, 38, 0.05);
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 17px 18px 14px;
+
+  border-bottom: 1px solid #edf0ed;
+}
+
+.notification-header h3 {
+  margin: 0;
+
+  color: #1c3427;
+
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.notification-header span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #89938d;
+
+  font-size: 10px;
+}
+
+.mark-read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  border: none;
+  background: transparent;
+
+  color: #52715e;
+
+  font-size: 10px;
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.mark-read-btn:hover {
+  color: #173d29;
+}
+
+.notification-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 11px;
+
+  padding: 14px 17px;
+
+  border: none;
+  border-bottom: 1px solid #f0f2f0;
+
+  background: #ffffff;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.16s ease;
+}
+
+.notification-item:hover {
+  background: #f7f9f7;
+}
+
+.notification-item.unread {
+  background: #fbfdfb;
+}
+
+.notification-icon {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #edf4ee;
+  color: #386248;
+}
+
+.notification-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.notification-title-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.notification-title-row strong {
+  color: #263c30;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.unread-dot {
+  width: 6px;
+  height: 6px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #d86b52;
+}
+
+.notification-content p {
+  margin: 5px 0 5px;
+
+  color: #707c74;
+
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.notification-time {
+  color: #a0a8a3;
+
+  font-size: 9px;
+}
+
+.notification-footer {
+  width: 100%;
+
+  padding: 12px 16px;
+
+  border: none;
+  border-top: 1px solid #edf0ed;
+
+  background: #ffffff;
+
+  color: #356047;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: background 0.16s ease;
+}
+
+.notification-footer:hover {
+  background: #f5f8f5;
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.navbar-profile-wrapper {
+  position: relative;
+
+  margin-left: 5px;
+}
+
+.navbar-profile {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  min-height: 44px;
+
+  padding: 4px 8px 4px 5px;
+
+  border: 1px solid transparent;
+  border-radius: 10px;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.navbar-profile:hover,
+.navbar-profile.is-open {
+  background: #f4f7f4;
+  border-color: #e5ebe6;
+}
+
+.navbar-avatar {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 9px;
+
+  border: 1px solid #dfe7e1;
+}
+
+.navbar-profile-info {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  min-width: 0;
+
+  text-align: left;
+}
+
+.navbar-profile-name {
+  max-width: 145px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #24382c;
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.navbar-profile-role {
+  margin-top: 3px;
+
+  color: #8a958e;
+
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.profile-chevron {
+  margin-left: 3px;
+
+  color: #849089;
+
+  transition: transform 0.18s ease;
+}
+
+.profile-chevron.rotate {
+  transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+   ========================================================= */
+
+.profile-dropdown {
+  position: absolute;
+
+  top: calc(100% + 11px);
+  right: 0;
+
+  width: 245px;
+
+  overflow: hidden;
+
+  padding: 8px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8e3;
+  border-radius: 14px;
+
+  box-shadow:
+    0 14px 35px rgba(26, 54, 38, 0.10),
+    0 3px 8px rgba(26, 54, 38, 0.05);
+}
+
+.profile-dropdown-head {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 9px;
+}
+
+.profile-dropdown-avatar {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+
+  border: 1px solid #dfe7e1;
+}
+
+.profile-dropdown-head div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-dropdown-head strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #24382c;
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.profile-dropdown-head span {
+  margin-top: 4px;
+
+  color: #8a958e;
+
+  font-size: 9px;
+}
+
+.profile-dropdown-divider {
+  height: 1px;
+
+  margin: 5px 3px;
+
+  background: #edf0ed;
+}
+
+.profile-dropdown-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 10px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #506058;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.16s ease,
+    color 0.16s ease;
+}
+
+.profile-dropdown-item:hover {
+  background: #f3f6f3;
+  color: #173d29;
+}
+
+.profile-dropdown-item.logout {
+  color: #a05e50;
+}
+
+.profile-dropdown-item.logout:hover {
+  background: #fcf3f1;
+  color: #934c3e;
+}
+
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+.nav-toggle-btn:focus-visible,
+.navbar-icon-btn:focus-visible,
+.navbar-profile:focus-visible,
+.profile-dropdown-item:focus-visible,
+.notification-item:focus-visible,
+.notification-footer:focus-visible,
+.mark-read-btn:focus-visible {
+  outline: 2px solid #8eaf9a;
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
   .navbar-container {
-    padding: 12px 16px;
+    padding: 0 18px;
   }
+
+  .brand-subtitle {
+    display: none;
+  }
+
+  .navbar-profile-info {
+    display: none;
+  }
+
+  .navbar-profile {
+    padding-right: 4px;
+  }
+
+  .profile-chevron {
+    display: none;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .navbar-container {
+    height: 62px;
+    padding: 0 12px;
+  }
+
+  .nav-toggle-btn {
+    margin-right: 9px;
+  }
+
+  .navbar-logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .navbar-brand-text {
+    margin-left: 7px;
+  }
+
+  .brand-name {
+    font-size: 13px;
+  }
+
   .navbar-right {
-    gap: 12px;
+    gap: 2px;
+  }
+
+  .navbar-icon-btn {
+    width: 35px;
+    height: 35px;
+  }
+
+  .navbar-profile-wrapper {
+    margin-left: 2px;
+  }
+
+  .navbar-profile {
+    min-height: 38px;
+    padding: 2px;
+  }
+
+  .navbar-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .notification-panel {
+    position: fixed;
+
+    top: 68px;
+    left: 12px;
+    right: 12px;
+
+    width: auto;
+  }
+
+  .profile-dropdown {
+    right: 0;
+    width: 220px;
+  }
+}
+
+
+@media (max-width: 380px) {
+  .navbar-brand-text {
+    display: none;
+  }
+
+  .settings-button {
+    display: none;
+  }
+
+  .notification-panel {
+    top: 64px;
   }
 }

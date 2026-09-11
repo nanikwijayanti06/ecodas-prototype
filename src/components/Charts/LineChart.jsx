@@ -1,42 +1,63 @@
-import './Charts.css';
+import React from "react";
+import "./Charts.css";
 
-// chart garis sederhana pakai svg murni, data = array angka, labels = array teks
-export default function LineChart({ data, labels, height = 220 }) {
-  const max = Math.max(...data) * 1.1 || 1;
-  const w = 560;
-  const h = height;
-  const padX = 34;
-  const padY = 26;
-  const stepX = (w - padX * 2) / (data.length - 1 || 1);
+export default function LineChart({
+  data = [],
+  title = "Line Chart",
+  valueKey = "value",
+  labelKey = "label",
+}) {
+  const values = data.map((item) => Number(item[valueKey]) || 0);
 
-  const points = data.map((v, i) => ({
-    x: padX + i * stepX,
-    y: h - padY - (v / max) * (h - padY * 2),
-  }));
-
-  const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+  const maxValue = Math.max(...values, 1);
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="chart-svg" role="img">
-      {[0.25, 0.5, 0.75, 1].map((t) => (
-        <line
-          key={t}
-          x1={padX}
-          x2={w - padX}
-          y1={h - padY - t * (h - padY * 2)}
-          y2={h - padY - t * (h - padY * 2)}
-          stroke="#e2e8f0"
-        />
-      ))}
-      <path d={path} fill="none" stroke="#059669" strokeWidth="2.5" />
-      {points.map((p, i) => (
-        <g key={i}>
-          <circle cx={p.x} cy={p.y} r="4" fill="#fff" stroke="#059669" strokeWidth="2" />
-          <text x={p.x} y={h - 8} textAnchor="middle" fontSize="11" fill="#64748b">
-            {labels[i]}
-          </text>
-        </g>
-      ))}
-    </svg>
+    <div className="chart-component">
+      {title && (
+        <div className="chart-component-header">
+          <h3>{title}</h3>
+        </div>
+      )}
+
+      <div className="line-chart-container">
+        {data.length === 0 ? (
+          <div className="chart-empty">Belum ada data.</div>
+        ) : (
+          <>
+            <div className="line-chart-grid">
+              <div className="grid-line" />
+              <div className="grid-line" />
+              <div className="grid-line" />
+              <div className="grid-line" />
+            </div>
+
+            <div className="line-chart-points">
+              {data.map((item, index) => {
+                const value = Number(item[valueKey]) || 0;
+
+                const bottom = value === 0 ? 0 : (value / maxValue) * 100;
+
+                return (
+                  <div
+                    className="line-chart-point-wrapper"
+                    key={`${item[labelKey]}-${index}`}
+                  >
+                    <div
+                      className="line-chart-point"
+                      style={{
+                        bottom: `${bottom}%`,
+                      }}
+                      title={`${item[labelKey]}: ${value}`}
+                    />
+
+                    <span className="line-chart-label">{item[labelKey]}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 }

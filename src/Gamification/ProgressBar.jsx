@@ -1,5 +1,5 @@
 import React from "react";
-import "../Charts/Charts.css";
+import "../components/Charts/Charts.css";
 
 export default function ProgressBar({
   value = 0,

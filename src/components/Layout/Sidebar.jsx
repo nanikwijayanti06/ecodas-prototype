@@ -1,96 +1,188 @@
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Eye, 
-  Compass, 
-  Activity, 
-  User, 
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Eye,
+  Activity,
+  User,
   LogOut,
   HelpCircle,
   Menu,
-  X
-} from 'lucide-react';
-import './Sidebar.css';
+  X,
+} from "lucide-react";
+
+import logo from "../../assets/images/logo.png";
+import "./Sidebar.css";
 
 export default function Sidebar() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(true); // State untuk buka tutup sidebar
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    navigate('/login', { replace: true });
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    navigate("/login", { replace: true });
   };
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  const closeMobileSidebar = () => {
+    if (window.innerWidth <= 768) {
+      setIsOpen(false);
+    }
   };
-
-  const menuItems = [
-    { path: '/mahasiswa/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/mahasiswa/awareness', label: 'Awareness', icon: Eye },
-    { path: '/mahasiswa/tracker', label: 'Tracker', icon: Compass },
-    { path: '/mahasiswa/behavior', label: 'Behavior', icon: Activity },
-    { path: '/mahasiswa/profile', label: 'Profile', icon: User },
-  ];
 
   return (
     <>
-      {/* Tombol Hamburger untuk Mobile */}
-      <button className="mobile-toggle" onClick={toggleSidebar}>
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      {/* =========================
+          MOBILE TOGGLE
+      ========================= */}
+      <button
+        className="sidebar-mobile-toggle"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle sidebar"
+      >
+        {isOpen ? <X size={21} /> : <Menu size={21} />}
       </button>
 
-      {/* Overlay gelap jika sidebar terbuka di mobile */}
-      {isOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
+      {/* =========================
+          MOBILE OVERLAY
+      ========================= */}
+      {isOpen && (
+        <div className="sidebar-overlay" onClick={() => setIsOpen(false)} />
+      )}
 
-      <aside className={`sidebar-container ${isOpen ? 'open' : 'closed'}`}>
-        {/* Header / Logo */}
-        <div className="sidebar-header">
-          <div className="sidebar-logo">
-            {/* Ganti dengan logo Ecodas kamu */}
-            <div className="logo-placeholder">E</div> 
-            <span className="logo-text">Ecodas</span>
+      {/* =========================
+          SIDEBAR
+      ========================= */}
+      <aside
+        className={`sidebar ${isOpen ? "sidebar-open" : "sidebar-closed"}`}
+      >
+        {/* =========================
+            BRAND
+        ========================= */}
+        <div className="sidebar-brand">
+          {/* LOGO BESAR */}
+          <div className="sidebar-logo-box">
+            <img src={logo} alt="ECODAS Logo" className="sidebar-logo" />
           </div>
+
+          {/* ECODAS */}
+          <div className="sidebar-brand-name">ECODAS</div>
+
+          {/* SUBTITLE */}
+          <div className="sidebar-brand-subtitle">Eco Consumption Decision</div>
         </div>
 
-        {/* Menu Utama */}
-        <div className="sidebar-menu-wrapper">
+        {/* =========================
+            SIDEBAR CONTENT
+        ========================= */}
+        <div className="sidebar-content">
+          {/* OVERVIEW */}
+          <div className="sidebar-section-label">OVERVIEW</div>
+
           <nav className="sidebar-nav">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => window.innerWidth <= 768 && setIsOpen(false)} // Otomatis tutup di mobile saat diklik
-                  className={({ isActive }) => 
-                    `nav-item ${isActive ? 'nav-item-active' : ''}`
-                  }
-                >
-                  <Icon className="nav-icon" size={20} />
-                  <span>{item.label}</span>
-                </NavLink>
-              );
-            })}
+            <NavLink
+              to="/mahasiswa/dashboard"
+              onClick={closeMobileSidebar}
+              className={({ isActive }) =>
+                `sidebar-nav-item ${isActive ? "sidebar-nav-active" : ""}`
+              }
+            >
+              <LayoutDashboard size={19} strokeWidth={1.8} />
+
+              <span>Dashboard</span>
+            </NavLink>
+          </nav>
+
+          {/* BIJAK-M */}
+          <div className="sidebar-section-label sidebar-section-space">
+            BIJAK-M
+          </div>
+
+          <nav className="sidebar-nav">
+            {/* Awareness */}
+            <NavLink
+              to="/mahasiswa/awareness"
+              onClick={closeMobileSidebar}
+              className={({ isActive }) =>
+                `sidebar-nav-item ${isActive ? "sidebar-nav-active" : ""}`
+              }
+            >
+              <Eye size={19} strokeWidth={1.8} />
+
+              <span>Awareness</span>
+            </NavLink>
+
+            {/* Feedback */}
+            <NavLink
+              to="/mahasiswa/tracker"
+              onClick={closeMobileSidebar}
+              className={({ isActive }) =>
+                `sidebar-nav-item ${isActive ? "sidebar-nav-active" : ""}`
+              }
+            >
+              <Activity size={19} strokeWidth={1.8} />
+
+              <span>Feedback Mechanism</span>
+            </NavLink>
+
+            {/* Behavior */}
+            <NavLink
+              to="/mahasiswa/behavior"
+              onClick={closeMobileSidebar}
+              className={({ isActive }) =>
+                `sidebar-nav-item ${isActive ? "sidebar-nav-active" : ""}`
+              }
+            >
+              <Activity size={19} strokeWidth={1.8} />
+
+              <span>Behavior Change</span>
+            </NavLink>
+          </nav>
+
+          {/* PERSONAL */}
+          <div className="sidebar-section-label sidebar-section-space">
+            PERSONAL
+          </div>
+
+          <nav className="sidebar-nav">
+            <NavLink
+              to="/mahasiswa/profile"
+              onClick={closeMobileSidebar}
+              className={({ isActive }) =>
+                `sidebar-nav-item ${isActive ? "sidebar-nav-active" : ""}`
+              }
+            >
+              <User size={19} strokeWidth={1.8} />
+
+              <span>Profile</span>
+            </NavLink>
           </nav>
         </div>
 
-        {/* Footer (Bawah) - Mirip Grammarly */}
+        {/* =========================
+            FOOTER
+        ========================= */}
         <div className="sidebar-footer">
-          <div className="footer-divider"></div>
-          
-          <button className="nav-item footer-item">
-            <HelpCircle className="nav-icon" size={20} />
+          {/* SUPPORT */}
+          <button type="button" className="sidebar-footer-item">
+            <HelpCircle size={18} strokeWidth={1.8} />
+
             <span>Support</span>
           </button>
-          
-          <button onClick={handleLogout} className="nav-item footer-item text-danger">
-            <LogOut className="nav-icon" size={20} />
-            <div className="logout-text">
+
+          {/* LOGOUT */}
+          <button
+            type="button"
+            className="sidebar-footer-item sidebar-logout"
+            onClick={handleLogout}
+          >
+            <LogOut size={18} strokeWidth={1.8} />
+
+            <div className="sidebar-logout-text">
               <span>Sign out</span>
-              <span className="logout-email">user@ecodas.co</span>
+
+              <small>user@ecodas.co</small>
             </div>
           </button>
         </div>

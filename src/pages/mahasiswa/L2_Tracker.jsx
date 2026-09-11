@@ -1,518 +1,828 @@
-import React, { useState } from 'react';
-import { 
-  Plus, Search, Edit3, Trash2, X, Upload, 
-  ChevronLeft, ChevronRight, Calendar, Leaf, 
-  CheckCircle2, Bookmark, Sparkles, FileText
-} from 'lucide-react';
+import { useMemo, useState } from "react";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  BarChart3,
+  Bus,
+  Check,
+  ChevronRight,
+  CircleHelp,
+  Leaf,
+  Plus,
+  Search,
+  ShoppingBag,
+  SlidersHorizontal,
+  Utensils,
+  X,
+  Zap,
+} from "lucide-react";
+import "./mahasiswa.css";
 
-// Data Awal Riwayat Aktivitas
-const INITIAL_ACTIVITIES = [
-  { id: 1, date: '08 Sep 2026', title: 'Bawa Tumbler Air Minum', category: 'Plastik', amount: '1 botol', impact: '-0.5 kg CO₂', status: 'Terverifikasi' },
-  { id: 2, date: '08 Sep 2026', title: 'Jalan Kaki ke Fakultas', category: 'Mobilitas', amount: '1.2 km', impact: '-0.8 kg CO₂', status: 'Terverifikasi' },
-  { id: 3, date: '08 Sep 2026', title: 'Pemilahan Sampah Kantin', category: 'Konsumsi', amount: '1 porsi', impact: '-0.3 kg CO₂', status: 'Proses' },
-  { id: 4, date: '07 Sep 2026', title: 'Submit Tugas via LMS Digital', category: 'Paperless', amount: '5 lembar', impact: '-0.2 kg CO₂', status: 'Terverifikasi' },
-  { id: 5, date: '06 Sep 2026', title: 'Matikan AC & Lampu Kelas', category: 'Energi', amount: '2 jam', impact: '-0.6 kg CO₂', status: 'Terverifikasi' },
+const categoryData = [
+  {
+    id: "Makanan",
+    label: "Makanan",
+    image: "/assets/tracker-food.png",
+    icon: Utensils,
+    description: "Pilihan makanan dan penggunaan kemasan.",
+  },
+  {
+    id: "Transportasi",
+    label: "Transportasi",
+    image: "/assets/tracker-transport.png",
+    icon: Bus,
+    description: "Perjalanan dan pilihan moda transportasi.",
+  },
+  {
+    id: "Plastik",
+    label: "Plastik",
+    image: "/assets/tracker-plastic.png",
+    icon: ShoppingBag,
+    description: "Penggunaan produk sekali pakai.",
+  },
+  {
+    id: "Energi",
+    label: "Energi",
+    image: "/assets/tracker-energy.png",
+    icon: Zap,
+    description: "Penggunaan listrik dan perangkat.",
+  },
 ];
 
-export default function Tracker() {
-  // State CRUD & Filter
-  const [activities, setActivities] = useState(INITIAL_ACTIVITIES);
-  const [activeTab, setActiveTab] = useState('Hari ini');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+const initialActivities = [
+  {
+    id: 1,
+    date: "10 Sep",
+    day: "Hari ini",
+    category: "Transportasi",
+    activity: "Berjalan kaki ke kampus",
+    impact: 1.8,
+    image: "/assets/tracker-transport.png",
+    status: true,
+    detail:
+      "Berjalan kaki membantu mengurangi penggunaan kendaraan bermotor untuk perjalanan jarak dekat.",
+  },
+  {
+    id: 2,
+    date: "10 Sep",
+    day: "Hari ini",
+    category: "Makanan",
+    activity: "Membawa bekal",
+    impact: 0.7,
+    image: "/assets/tracker-food.png",
+    status: true,
+    detail:
+      "Membawa bekal dapat mengurangi penggunaan kemasan makanan sekali pakai.",
+  },
+  {
+    id: 3,
+    date: "9 Sep",
+    day: "Kemarin",
+    category: "Plastik",
+    activity: "Menggunakan tumbler",
+    impact: 0.5,
+    image: "/assets/tracker-plastic.png",
+    status: true,
+    detail:
+      "Penggunaan tumbler merupakan alternatif terhadap pembelian minuman dalam kemasan sekali pakai.",
+  },
+  {
+    id: 4,
+    date: "9 Sep",
+    day: "Kemarin",
+    category: "Transportasi",
+    activity: "Menggunakan transportasi umum",
+    impact: 2.1,
+    image: "/assets/tracker-transport.png",
+    status: true,
+    detail:
+      "Transportasi umum dapat menjadi alternatif penggunaan kendaraan pribadi.",
+  },
+  {
+    id: 5,
+    date: "8 Sep",
+    day: "Selasa",
+    category: "Energi",
+    activity: "Mematikan perangkat setelah digunakan",
+    impact: 0.4,
+    image: "/assets/tracker-energy.png",
+    status: true,
+    detail:
+      "Mematikan perangkat setelah digunakan membantu mengurangi konsumsi energi yang tidak diperlukan.",
+  },
+  {
+    id: 6,
+    date: "8 Sep",
+    day: "Selasa",
+    category: "Makanan",
+    activity: "Memilih makanan dengan kemasan minimal",
+    impact: 0.8,
+    image: "/assets/tracker-food.png",
+    status: true,
+    detail:
+      "Memilih produk dengan kemasan minimal dapat membantu mengurangi penggunaan material.",
+  },
+];
 
-  // State Modal (Layout terinspirasi VEED)
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({
-    title: '',
-    category: 'Plastik',
-    amount: '',
-    impact: '-0.5 kg CO₂',
-    status: 'Terverifikasi',
-    date: '08 Sep 2026',
-    fileProof: null
+const chart7 = [
+  { label: "4", day: "Sen", value: 2.3 },
+  { label: "5", day: "Sel", value: 1.2 },
+  { label: "6", day: "Rab", value: 2.8 },
+  { label: "7", day: "Kam", value: 1.5 },
+  { label: "8", day: "Jum", value: 2.2 },
+  { label: "9", day: "Sab", value: 1.1 },
+  { label: "10", day: "Min", value: 2.5 },
+];
+
+const chart30 = [
+  { label: "12", day: "Agu", value: 1.8 },
+  { label: "15", day: "Agu", value: 2.6 },
+  { label: "18", day: "Agu", value: 1.4 },
+  { label: "21", day: "Agu", value: 3.1 },
+  { label: "24", day: "Agu", value: 2.0 },
+  { label: "27", day: "Agu", value: 2.8 },
+  { label: "30", day: "Agu", value: 1.6 },
+  { label: "2", day: "Sep", value: 2.4 },
+  { label: "5", day: "Sep", value: 1.7 },
+  { label: "10", day: "Sep", value: 2.5 },
+];
+
+function ImageWithFallback({ src, alt, className }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <div className={`${className} image-fallback`}>
+        <Leaf size={24} />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
+export default function L2_Tracker() {
+  const [activities, setActivities] = useState(initialActivities);
+  const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const [selectedActivity, setSelectedActivity] = useState(
+    initialActivities[0],
+  );
+  const [period, setPeriod] = useState("7");
+  const [selectedChartDay, setSelectedChartDay] = useState(null);
+  const [search, setSearch] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [newActivity, setNewActivity] = useState({
+    activity: "",
+    category: "Makanan",
+    impact: "",
   });
 
-  // Filter Data
-  const filteredActivities = activities.filter(act => {
-    const matchSearch = act.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        act.category.toLowerCase().includes(searchQuery.toLowerCase());
-    if (activeTab === 'Hari ini') return matchSearch && act.date === '08 Sep 2026';
-    return matchSearch;
+  const chartData = period === "7" ? chart7 : chart30;
+
+  const filteredActivities = useMemo(() => {
+    return activities.filter((item) => {
+      const categoryMatch =
+        selectedCategory === "Semua" || item.category === selectedCategory;
+
+      const searchMatch = item.activity
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      return categoryMatch && searchMatch;
+    });
+  }, [activities, selectedCategory, search]);
+
+  const totalImpact = activities.reduce(
+    (total, item) => total + item.impact,
+    0,
+  );
+
+  const completed = activities.filter((item) => item.status).length;
+
+  const progress = Math.min(Math.round((completed / 8) * 100), 100);
+
+  const categoryImpact = categoryData.map((category) => {
+    const value = activities
+      .filter((item) => item.category === category.id)
+      .reduce((sum, item) => sum + item.impact, 0);
+
+    return {
+      ...category,
+      value,
+    };
   });
 
-  // Pagination Logic
-  const totalPages = Math.ceil(filteredActivities.length / itemsPerPage) || 1;
-  const paginatedData = filteredActivities.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  // Modal Handler
-  const handleOpenModal = (item = null, presetCategory = null) => {
-    if (item) {
-      setEditingId(item.id);
-      setFormData(item);
-    } else {
-      setEditingId(null);
-      setFormData({
-        title: '',
-        category: presetCategory || 'Plastik',
-        amount: '1 Porsi / Kali',
-        impact: '-0.4 kg CO₂',
-        status: 'Terverifikasi',
-        date: '08 Sep 2026',
-        fileProof: null
-      });
-    }
-    setIsModalOpen(true);
+  const handleToggle = (id) => {
+    setActivities((current) =>
+      current.map((item) =>
+        item.id === id ? { ...item, status: !item.status } : item,
+      ),
+    );
   };
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (!formData.title) return;
+  const handleAddActivity = (event) => {
+    event.preventDefault();
 
-    if (editingId) {
-      setActivities(activities.map(a => a.id === editingId ? { ...a, ...formData } : a));
-    } else {
-      setActivities([{ id: Date.now(), ...formData }, ...activities]);
-    }
-    setIsModalOpen(false);
-  };
+    if (!newActivity.activity.trim()) return;
 
-  const handleDelete = (id) => {
-    if (confirm('Hapus aktivitas ini dari riwayat?')) {
-      setActivities(activities.filter(a => a.id !== id));
-    }
+    const category = categoryData.find(
+      (item) => item.id === newActivity.category,
+    );
+
+    const item = {
+      id: Date.now(),
+      date: "10 Sep",
+      day: "Hari ini",
+      category: newActivity.category,
+      activity: newActivity.activity,
+      impact: Number(newActivity.impact) || 0,
+      image: category?.image,
+      status: true,
+      detail: "Aktivitas baru yang kamu catat melalui Eco Tracker.",
+    };
+
+    setActivities((current) => [item, ...current]);
+    setSelectedActivity(item);
+
+    setNewActivity({
+      activity: "",
+      category: "Makanan",
+      impact: "",
+    });
+
+    setModalOpen(false);
   };
 
   return (
-    <div className="flex-1 bg-slate-50 min-h-screen p-6 md:p-8 space-y-6 text-slate-700 font-sans">
-      
-      {/* HEADER PAGE */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="l2-page">
+      {/* TOP BAR */}
+      <div className="l2-topbar">
+        <div className="l2-brand">
+          <div className="l2-brand-mark">
+            <Leaf size={17} />
+          </div>
+
+          <div>
+            <strong>ECODAS</strong>
+            <span>Eco Consumption Decision Support</span>
+          </div>
+        </div>
+
+        <div className="l2-user">
+          <div className="l2-user-avatar">NW</div>
+
+          <div>
+            <strong>Nanik Wijayanti</strong>
+            <span>Mahasiswa UNY</span>
+          </div>
+        </div>
+      </div>
+
+      {/* HEADER */}
+      <header className="l2-header">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Tracker</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Catat aktivitas konsumsi harianmu dan lihat dampaknya terhadap lingkungan.</p>
+          <div className="l2-breadcrumb">
+            <ChevronRight size={13} />
+          </div>
+
+          <div className="l2-title-row">
+            <div>
+              <h1>Feedback Mechanism</h1>
+
+              <p>
+                Kenali dampak dari pilihan konsumsi dan lihat perubahan
+                kebiasaanmu dari waktu ke waktu.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 shadow-xs">
-          <Calendar className="w-3.5 h-3.5 text-slate-400" />
-          <span>Hari ini • 08 Sep 2026</span>
-        </div>
-      </div>
+        <button className="l2-add-button" onClick={() => setModalOpen(true)}>
+          <Plus size={17} />
+          Catat aktivitas
+        </button>
+      </header>
 
-      {/* ROW 1: CATAT AKTIVITAS & DAMPAK HARI INI */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* KIRI: CATAT AKTIVITAS HARIAN */}
-        <div className="lg:col-span-6 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
+      {/* HERO / IMPACT STRIP */}
+      <section className="l2-impact-hero">
+        <div className="l2-impact-copy">
+          <span className="l2-eyebrow">YOUR CONSUMPTION IMPACT</span>
+
+          <h2>
+            Pilihan kecil,
+            <br />
+            terlihat dampaknya.
+          </h2>
+
+          <p>
+            Catatan konsumsi membantu kamu melihat pola aktivitas dan memahami
+            dampaknya terhadap lingkungan.
+          </p>
+
+          <div className="l2-impact-number">
+            <strong>{totalImpact.toFixed(1)}</strong>
+            <span>kg CO₂e</span>
+          </div>
+
+          <div className="l2-comparison">
+            <ArrowDownRight size={16} />
+            <strong>18%</strong>
+            <span>lebih rendah dari periode sebelumnya</span>
+          </div>
+        </div>
+
+        <div className="l2-impact-visual">
+          <ImageWithFallback
+            src="/assets/tracker-impact.png"
+            alt="Environmental impact"
+            className="l2-impact-image"
+          />
+
+          <div className="l2-floating-label">
+            <Leaf size={15} />
+            <span>Environmental Impact</span>
+          </div>
+        </div>
+      </section>
+
+      {/* CATEGORY */}
+      <section className="l2-section">
+        <div className="l2-section-heading">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold text-[#007A5e] uppercase tracking-wider">CATAT AKTIVITAS</span>
-              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-            </div>
-            <h2 className="text-lg font-bold text-slate-900 mt-1">Catat Aktivitas Harian</h2>
-            <p className="text-xs text-slate-500 mt-0.5">Catat aktivitasmu untuk melihat perkiraan reduksi emisi dan timbulan sampah.</p>
-
-            {/* KATEGORI CEPAT */}
-            <div className="mt-4">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">KATEGORI CEPAT:</p>
-              <div className="flex flex-wrap gap-2">
-                {['Plastik', 'Mobilitas', 'Konsumsi', 'Paperless', 'Energi'].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => handleOpenModal(null, cat)}
-                    className="text-xs font-semibold bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#007A5e] px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 transition-colors"
-                  >
-                    + {cat}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <span>01 / IMPACT BY CATEGORY</span>
+            <h2>Dari mana dampaknya berasal?</h2>
           </div>
 
-          <button
-            onClick={() => handleOpenModal()}
-            className="w-full bg-[#007A5e] hover:bg-[#00634c] text-white text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-xs"
-          >
-            <Plus className="w-4 h-4" />
-            <span>+ Catat Aktivitas</span>
-          </button>
+          <p>
+            Pilih kategori untuk melihat aktivitas yang berkontribusi pada
+            catatanmu.
+          </p>
         </div>
 
-        {/* KANAN: DAMPAK HARI INI */}
-        <div className="lg:col-span-6 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
-          <div>
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-sm font-bold text-slate-900">Dampak Hari Ini</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Estimasi kumulatif berdasarkan aktivitas tercatat hari ini</p>
-              </div>
-              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Terverifikasi</span>
-            </div>
+        <div className="l2-category-grid">
+          {categoryImpact.map((category) => {
+            const Icon = category.icon;
 
-            {/* METRIK 3 KOLOM */}
-            <div className="grid grid-cols-3 gap-3 mt-4">
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase">CO₂ TERHINDAR</p>
-                <p className="text-lg font-extrabold text-slate-900 mt-1">1.8 <span className="text-xs font-semibold">kg</span></p>
-                <p className="text-[10px] text-slate-400 mt-1">Estimasi emisi/reduksi</p>
-              </div>
+            const active = selectedCategory === category.id;
 
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase">SAMPAH TERHINDAR</p>
-                <p className="text-lg font-extrabold text-slate-900 mt-1">0.4 <span className="text-xs font-semibold">kg</span></p>
-                <p className="text-[10px] text-slate-400 mt-1">Timbulan terhindar & terkelola</p>
-              </div>
+            return (
+              <button
+                key={category.id}
+                className={`l2-category-card ${active ? "active" : ""}`}
+                onClick={() =>
+                  setSelectedCategory(active ? "Semua" : category.id)
+                }
+              >
+                <ImageWithFallback
+                  src={category.image}
+                  alt={category.label}
+                  className="l2-category-image"
+                />
 
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase">AKTIVITAS</p>
-                <p className="text-lg font-extrabold text-[#007A5e] mt-1">4 <span className="text-xs font-semibold">item</span></p>
-                <p className="text-[10px] text-slate-400 mt-1">Tercatat hari ini</p>
-              </div>
-            </div>
+                <div className="l2-category-overlay" />
+
+                <div className="l2-category-content">
+                  <div className="l2-category-icon">
+                    <Icon size={17} />
+                  </div>
+
+                  <div>
+                    <strong>{category.label}</strong>
+
+                    <span>{category.description}</span>
+                  </div>
+
+                  <div className="l2-category-value">
+                    {category.value.toFixed(1)}
+                    <small>kg</small>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          className={`l2-all-category ${
+            selectedCategory === "Semua" ? "active" : ""
+          }`}
+          onClick={() => setSelectedCategory("Semua")}
+        >
+          <span>Semua aktivitas</span>
+          <ChevronRight size={15} />
+        </button>
+      </section>
+
+      {/* PROGRESS + CHART */}
+      <section className="l2-analysis-grid">
+        <div className="l2-progress-panel">
+          <div className="l2-panel-label">
+            <span>02 / PROGRESS MONITORING</span>
+            <BarChart3 size={17} />
           </div>
 
-          <div className="flex justify-between items-center text-[10px] text-slate-400 pt-2 border-t border-slate-100">
-            <span>Standar emisi GHG Protocol University Hub</span>
-            <span className="font-semibold text-emerald-700">+24% efisiensi vs kemarin</span>
+          <h2>Perubahan kebiasaan</h2>
+
+          <p>
+            Pantau aktivitas konsumsi yang sudah kamu catat dalam periode ini.
+          </p>
+
+          <div className="l2-big-progress">
+            <strong>{progress}%</strong>
+            <span>aktivitas tercatat</span>
+          </div>
+
+          <div className="l2-progress-line">
+            <span style={{ width: `${progress}%` }} />
+          </div>
+
+          <div className="l2-progress-meta">
+            <span>{completed} aktivitas</span>
+            <span>Target 8 aktivitas</span>
+          </div>
+
+          <div className="l2-progress-note">
+            <Leaf size={15} />
+
+            <span>
+              Konsistensi pencatatan membantu sistem mengenali pola konsumsi
+              kamu.
+            </span>
           </div>
         </div>
 
-      </div>
-
-      {/* ROW 2: RIWAYAT AKTIVITAS (TABEL CRUD) */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        
-        {/* HEADER TABEL */}
-        <div className="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h3 className="text-sm font-bold text-slate-900">Riwayat Aktivitas</h3>
-            <p className="text-[11px] text-slate-400 mt-0.5">Daftar konsumsi dan aktivitas lingkungan yang telah dimasukkan.</p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Tab Filter */}
-            <div className="flex bg-slate-100 p-1 rounded-lg text-xs font-semibold text-slate-500">
-              {['Semua', 'Hari ini', 'Minggu ini'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => { setActiveTab(tab); setCurrentPage(1); }}
-                  className={`px-3 py-1 rounded-md transition-all ${
-                    activeTab === tab ? 'bg-white text-slate-800 shadow-xs' : 'hover:text-slate-800'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
+        <div className="l2-chart-panel">
+          <div className="l2-chart-header">
+            <div>
+              <span>03 / CONSUMPTION TREND</span>
+              <h2>Aktivitas dari waktu ke waktu</h2>
             </div>
 
-            {/* Search */}
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
-              <input 
-                type="text" 
-                placeholder="Cari aktivitas / kategori..." 
-                value={searchQuery}
-                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:ring-1 focus:ring-[#007A5e] w-48"
+            <div className="l2-period">
+              <button
+                className={period === "7" ? "active" : ""}
+                onClick={() => setPeriod("7")}
+              >
+                7 hari
+              </button>
+
+              <button
+                className={period === "30" ? "active" : ""}
+                onClick={() => setPeriod("30")}
+              >
+                30 hari
+              </button>
+            </div>
+          </div>
+
+          <div className="l2-chart">
+            <div className="l2-chart-y">
+              <span>4</span>
+              <span>3</span>
+              <span>2</span>
+              <span>1</span>
+              <span>0</span>
+            </div>
+
+            <div className="l2-chart-body">
+              <div className="l2-chart-lines">
+                <i />
+                <i />
+                <i />
+                <i />
+                <i />
+              </div>
+
+              <div className="l2-bars">
+                {chartData.map((item) => {
+                  const height = (item.value / 4) * 100;
+
+                  const active = selectedChartDay === item.day;
+
+                  return (
+                    <button
+                      key={`${item.day}-${item.label}`}
+                      className={`l2-bar-column ${active ? "selected" : ""}`}
+                      onClick={() =>
+                        setSelectedChartDay(active ? null : item.day)
+                      }
+                    >
+                      <span className="l2-bar-tooltip">
+                        {item.value} kg CO₂e
+                      </span>
+
+                      <div
+                        className="l2-bar"
+                        style={{
+                          height: `${height}%`,
+                        }}
+                      />
+
+                      <small>{item.day}</small>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="l2-chart-caption">
+            <span>
+              <i />
+              Estimasi dampak aktivitas
+            </span>
+
+            <span>Klik batang untuk melihat hari</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ACTIVITY */}
+      <section className="l2-activity-section">
+        <div className="l2-activity-heading">
+          <div>
+            <span>04 / ACTIVITY LOG</span>
+            <h2>Aktivitas konsumsi</h2>
+          </div>
+
+          <div className="l2-activity-tools">
+            <div className="l2-search">
+              <Search size={15} />
+
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Cari aktivitas"
               />
             </div>
-          </div>
-        </div>
 
-        {/* TABEL DATA */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-wider border-b border-slate-100">
-                <th className="py-3.5 px-5">TANGGAL</th>
-                <th className="py-3.5 px-5">AKTIVITAS</th>
-                <th className="py-3.5 px-5">KATEGORI</th>
-                <th className="py-3.5 px-5">JUMLAH</th>
-                <th className="py-3.5 px-5">DAMPAK</th>
-                <th className="py-3.5 px-5">STATUS</th>
-                <th className="py-3.5 px-5 text-center">AKSI</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-600">
-              {paginatedData.length > 0 ? (
-                paginatedData.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3.5 px-5 font-mono text-slate-400 text-[11px]">{item.date}</td>
-                    <td className="py-3.5 px-5 font-semibold text-slate-800">{item.title}</td>
-                    <td className="py-3.5 px-5 text-slate-600">{item.category}</td>
-                    <td className="py-3.5 px-5">{item.amount}</td>
-                    <td className="py-3.5 px-5 font-bold text-slate-800">{item.impact}</td>
-                    
-                    {/* STATUS: LATAR BELAKANG POLOS BG PUTIH (TANPA KOTAKAN) */}
-                    <td className="py-3.5 px-5 font-bold">
-                      <span className={
-                        item.status === 'Terverifikasi' ? 'text-emerald-700' : 'text-amber-700'
-                      }>
-                        {item.status}
-                      </span>
-                    </td>
-
-                    <td className="py-3.5 px-5 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <button 
-                          onClick={() => handleOpenModal(item)}
-                          className="p-1 text-slate-400 hover:text-[#007A5e] transition-colors"
-                          title="Edit"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(item.id)}
-                          className="p-1 text-slate-400 hover:text-rose-600 transition-colors"
-                          title="Hapus"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="7" className="py-8 text-center text-slate-400">
-                    Belum ada riwayat aktivitas yang tercatat.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* FOOTER & PAGINATION */}
-        <div className="p-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-          <div>
-            Menampilkan <span className="font-semibold text-slate-800">{paginatedData.length}</span> data riwayat
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <button 
-              onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
-              disabled={currentPage === 1}
-              className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40"
-            >
-              <ChevronLeft className="w-4 h-4" />
+            <button className="l2-filter">
+              <SlidersHorizontal size={15} />
+              Filter
             </button>
+          </div>
+        </div>
 
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`w-7 h-7 rounded-lg font-semibold text-xs ${
-                  currentPage === page ? 'bg-[#007A5e] text-white' : 'text-slate-600 hover:bg-slate-100'
-                }`}
+        <div className="l2-filter-tabs">
+          <button
+            className={selectedCategory === "Semua" ? "active" : ""}
+            onClick={() => setSelectedCategory("Semua")}
+          >
+            Semua
+          </button>
+
+          {categoryData.map((category) => (
+            <button
+              key={category.id}
+              className={selectedCategory === category.id ? "active" : ""}
+              onClick={() => setSelectedCategory(category.id)}
+            >
+              {category.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="l2-activity-list">
+          {filteredActivities.map((item) => (
+            <button
+              key={item.id}
+              className={`l2-activity-row ${
+                selectedActivity?.id === item.id ? "selected" : ""
+              }`}
+              onClick={() => setSelectedActivity(item)}
+            >
+              <span
+                className={`l2-check ${item.status ? "checked" : ""}`}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleToggle(item.id);
+                }}
               >
-                {page}
-              </button>
-            ))}
+                {item.status && <Check size={12} />}
+              </span>
 
-            <button 
-              onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40"
-            >
-              <ChevronRight className="w-4 h-4" />
+              <ImageWithFallback
+                src={item.image}
+                alt={item.activity}
+                className="l2-activity-image"
+              />
+
+              <span className="l2-activity-info">
+                <strong>{item.activity}</strong>
+
+                <small>
+                  {item.category} · {item.day}
+                </small>
+              </span>
+
+              <span className="l2-activity-impact">
+                <strong>{item.impact.toFixed(1)}</strong>
+
+                <small>kg CO₂e</small>
+              </span>
+
+              <ChevronRight className="l2-activity-chevron" size={17} />
             </button>
-          </div>
+          ))}
+
+          {filteredActivities.length === 0 && (
+            <div className="l2-empty">
+              <Search size={22} />
+              <strong>Aktivitas tidak ditemukan</strong>
+              <span>Coba gunakan kata pencarian lain.</span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* FEEDBACK */}
+      <section className="l2-feedback">
+        <div className="l2-feedback-visual">
+          <ImageWithFallback
+            src="/assets/tracker-impact.png"
+            alt="Feedback"
+            className="l2-feedback-image"
+          />
         </div>
 
-      </div>
+        <div className="l2-feedback-content">
+          <span>05 / ACTIONABLE FEEDBACK</span>
 
-      {/* ROW 3: PERKEMBANGAN MINGGU INI & REKOMENDASI */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* BAR CHART: PERKEMBANGAN MINGGU INI */}
-        <div className="lg:col-span-8 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4 flex flex-col justify-between">
-          <div>
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-sm font-bold text-slate-900">Perkembangan Minggu Ini</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Volume aktivitas harian dan konsistensi pengurangan emisi.</p>
-              </div>
-              <span className="text-[11px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md font-medium">
-                Periode: 02 Sep - 08 Sep 2026
+          <h2>Apa yang bisa kamu lakukan berikutnya?</h2>
+
+          <p>
+            Berdasarkan aktivitas yang kamu catat, transportasi menjadi salah
+            satu kontribusi terbesar pada periode ini.
+          </p>
+
+          <div className="l2-feedback-action">
+            <div className="l2-feedback-icon">
+              <Bus size={18} />
+            </div>
+
+            <div>
+              <strong>Pertimbangkan alternatif perjalanan</strong>
+
+              <span>
+                Untuk perjalanan jarak dekat, coba berjalan kaki atau gunakan
+                transportasi umum.
               </span>
             </div>
 
-            {/* VISUAL BARS */}
-            <div className="h-40 flex items-end justify-between gap-3 pt-6 px-4">
-              {[
-                { day: 'Sen', akt: 3, height: '60%' },
-                { day: 'Sel', akt: 2, height: '40%' },
-                { day: 'Rab', akt: 4, height: '85%' },
-                { day: 'Kam', akt: 2, height: '40%' },
-                { day: 'Jum', akt: 3, height: '60%' },
-                { day: 'Sab', akt: 1, height: '25%' },
-                { day: 'Min', akt: 3, height: '60%' },
-              ].map((item, idx) => (
-                <div key={idx} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
-                  <span className="text-[10px] text-slate-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                    {item.akt} akt
-                  </span>
-                  <div className="w-full bg-slate-100 h-full rounded-t-lg flex items-end justify-center p-0.5">
-                    <div 
-                      className="w-full bg-[#007A5e] group-hover:bg-[#00634c] rounded-t transition-all" 
-                      style={{ height: item.height }}
-                    ></div>
-                  </div>
-                  <span className="text-[11px] font-semibold text-slate-500 mt-1">{item.day}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between text-xs pt-3 border-t border-slate-100 font-medium">
-            <span className="text-slate-500">Aktivitas tercatat: <strong className="text-slate-800">18</strong></span>
-            <span className="text-slate-500">Net CO₂: <strong className="text-emerald-700">-3.2 kg</strong></span>
-            <span className="text-slate-500">Sampah tereduksi: <strong className="text-emerald-700">1.4 kg</strong></span>
+            <ArrowUpRight size={17} />
           </div>
         </div>
+      </section>
 
-        {/* KANAN: REKOMENDASI */}
-        <div className="lg:col-span-4 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-600" />
-                <h3 className="text-sm font-bold text-slate-900">Rekomendasi</h3>
-              </div>
-              <Bookmark className="w-4 h-4 text-slate-300" />
-            </div>
+      {/* COMPARATIVE FEEDBACK */}
+      <section className="l2-comparison-section">
+        <div>
+          <span>06 / COMPARATIVE FEEDBACK</span>
 
-            <div className="bg-amber-50/60 p-3 rounded-xl border border-amber-100 space-y-1">
-              <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">FOKUS PERBAIKAN KAMPUS</span>
-              <p className="text-xs text-slate-700 leading-relaxed">
-                Penggunaan plastik sekali pakai masih menjadi aktivitas yang paling sering tercatat minggu ini. Coba gunakan tumbler dan tas belanja ulang pakai untuk mengurangi timbulan plastik harianmu.
-              </p>
-            </div>
-
-            <div className="space-y-2 text-xs text-slate-600 pt-1">
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>Bawa wadah bekal sendiri di kantin fakultas</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>Manfaatkan water refill station di koridor utama</span>
-              </div>
-            </div>
-          </div>
-
-          <button className="w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold py-2.5 rounded-xl transition-colors">
-            Mulai Aksi Ramah Plastik →
-          </button>
+          <h2>Lihat perubahan, bukan sekadar angka.</h2>
         </div>
 
-      </div>
+        <div className="l2-comparison-stats">
+          <div>
+            <span>Minggu ini</span>
+            <strong>6.4</strong>
+            <small>kg CO₂e</small>
+          </div>
 
-      {/* MODAL POPUP (TAMPILAN BERSIH BERSIFAT VEED-STYLE) */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-2xl p-6 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in duration-150">
-            
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="l2-comparison-arrow">
+            <ArrowDownRight size={18} />
+          </div>
+
+          <div>
+            <span>Minggu sebelumnya</span>
+            <strong>7.8</strong>
+            <small>kg CO₂e</small>
+          </div>
+
+          <div className="l2-comparison-change">
+            <strong>−18%</strong>
+            <span>perubahan</span>
+          </div>
+        </div>
+      </section>
+
+      {/* MODAL */}
+      {modalOpen && (
+        <div
+          className="l2-modal-overlay"
+          onMouseDown={() => setModalOpen(false)}
+        >
+          <div
+            className="l2-modal"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="l2-modal-header">
               <div>
-                <h2 className="text-base font-bold text-slate-900">
-                  {editingId ? 'Edit Catatan Aktivitas' : 'Catat Aktivitas Lingkungan Baru'}
-                </h2>
-                <p className="text-xs text-slate-400 mt-0.5">Pilih kategori atau unggah bukti pendukung aksi konsumsimu</p>
+                <span>NEW ACTIVITY</span>
+                <h2>Catat aktivitas</h2>
+                <p>Tambahkan aktivitas konsumsi yang baru kamu lakukan.</p>
               </div>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
-                <X className="w-5 h-5" />
+
+              <button onClick={() => setModalOpen(false)}>
+                <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4">
-              
-              {/* VEED STYLE UPLOAD ZONE */}
-              <div className="border-2 border-dashed border-slate-200 hover:border-[#007A5e] rounded-xl p-5 text-center bg-slate-50/50 transition-colors cursor-pointer group">
-                <div className="w-10 h-10 bg-white shadow-xs rounded-full flex items-center justify-center mx-auto mb-2 border border-slate-200 group-hover:scale-105 transition-transform">
-                  <Upload className="w-5 h-5 text-[#007A5e]" />
-                </div>
-                <p className="text-xs font-semibold text-slate-700">Unggah Bukti Aksi (Foto / Resi / Dokumen)</p>
-                <p className="text-[10px] text-slate-400 mt-0.5">Klik untuk memilih file atau tarik file ke area ini</p>
-              </div>
+            <form onSubmit={handleAddActivity}>
+              <label>
+                Aktivitas
+                <input
+                  autoFocus
+                  value={newActivity.activity}
+                  onChange={(event) =>
+                    setNewActivity({
+                      ...newActivity,
+                      activity: event.target.value,
+                    })
+                  }
+                  placeholder="Contoh: Membawa botol minum sendiri"
+                />
+              </label>
 
-              {/* Input Fields Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Nama Aktivitas / Konsumsi</label>
-                  <input 
-                    type="text"
-                    required
-                    placeholder="Misal: Membawa Tumbler Sendiri"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full p-2.5 border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-[#007A5e]"
+              <label>
+                Kategori
+                <div className="l2-modal-categories">
+                  {categoryData.map((category) => {
+                    const Icon = category.icon;
+
+                    return (
+                      <button
+                        type="button"
+                        key={category.id}
+                        className={
+                          newActivity.category === category.id ? "active" : ""
+                        }
+                        onClick={() =>
+                          setNewActivity({
+                            ...newActivity,
+                            category: category.id,
+                          })
+                        }
+                      >
+                        <Icon size={16} />
+                        {category.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </label>
+
+              <label>
+                Estimasi dampak
+                <div className="l2-impact-input">
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    value={newActivity.impact}
+                    onChange={(event) =>
+                      setNewActivity({
+                        ...newActivity,
+                        impact: event.target.value,
+                      })
+                    }
+                    placeholder="0.0"
                   />
-                </div>
 
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Kategori Aktivitas</label>
-                  <select 
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full p-2.5 border border-slate-200 rounded-lg outline-none cursor-pointer"
-                  >
-                    <option value="Plastik">Plastik</option>
-                    <option value="Mobilitas">Mobilitas</option>
-                    <option value="Konsumsi">Konsumsi</option>
-                    <option value="Paperless">Paperless</option>
-                    <option value="Energi">Energi</option>
-                  </select>
+                  <span>kg CO₂e</span>
                 </div>
+                <small>
+                  Gunakan nilai estimasi yang digunakan dalam metode perhitungan
+                  sistem.
+                </small>
+              </label>
 
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Jumlah / Durasi</label>
-                  <input 
-                    type="text"
-                    placeholder="Misal: 1 botol / 2 km"
-                    value={formData.amount}
-                    onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                    className="w-full p-2.5 border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-[#007A5e]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Estimasi Reduksi CO₂</label>
-                  <input 
-                    type="text"
-                    value={formData.impact}
-                    onChange={(e) => setFormData({ ...formData, impact: e.target.value })}
-                    className="w-full p-2.5 border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-[#007A5e]"
-                  />
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="pt-3 border-t border-slate-100 flex justify-end gap-2 text-xs">
-                <button 
-                  type="button" 
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold"
+              <div className="l2-modal-actions">
+                <button
+                  type="button"
+                  className="cancel"
+                  onClick={() => setModalOpen(false)}
                 >
                   Batal
                 </button>
-                <button 
-                  type="submit" 
-                  className="px-5 py-2 rounded-xl bg-[#007A5e] hover:bg-[#00634c] text-white font-semibold shadow-xs"
-                >
-                  Simpan Aktivitas
+
+                <button type="submit" className="save">
+                  <Plus size={16} />
+                  Simpan aktivitas
                 </button>
               </div>
-
             </form>
           </div>
         </div>
       )}
-
     </div>
   );
 }

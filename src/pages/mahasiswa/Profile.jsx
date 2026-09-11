@@ -1,630 +1,1332 @@
-import React, { useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  ArrowLeft,
+  UserRound,
   Mail,
   Phone,
-  ChevronDown,
-  Edit2,
-  FileText,
-  LogOut,
-  Award,
-  Star,
-  Search,
-  Filter,
-  ArrowUpRight,
-  X,
+  MapPin,
+  CalendarDays,
+  GraduationCap,
+  Pencil,
+  Plus,
+  Trash2,
   Eye,
-  EyeOff,
+  Search,
+  X,
+  Upload,
+  Image as ImageIcon,
+  CheckCircle2,
+  Clock3,
+  Leaf,
+  ChevronDown,
+  MoreHorizontal,
+  FileImage,
+  Save,
+  ArrowLeft,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
-// Path gambar profil yang bisa diganti sesuai file di folder assets kamu
 import profileAvatar from "../../assets/images/profile-avatar.jpg";
 
-export default function ProfileContent() {
+const ProfileContent = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
-  const [showSensitive, setShowSensitive] = useState(false);
-  const [isActionsOpen, setIsActionsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("Informasi");
-  const [activeSubTab, setActiveSubTab] = useState("PERSONAL");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Semua");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  // =========================================================
+  // DATA MAHASISWA
+  // =========================================================
 
   const [studentData, setStudentData] = useState({
-    lastName: "Wijayanti",
-    firstName: "Nanik",
-    middleName: "-",
-    preferredName: "Nanik",
-    nim: "21508334012",
-    status: "Aktif",
+    name: "Nanik Wijayanti",
+    nim: "236125410XX",
+    status: "Mahasiswa Aktif",
     country: "Indonesia",
-    address:
-      "Jl. Colombo No. 1, Karang Malang, Depok, Sleman, DI Yogyakarta 55281",
+    address: "Sleman, Daerah Istimewa Yogyakarta",
     gender: "Perempuan",
-    birthdate: "12 Agustus 2002",
-    email: "nanik.wijayanti@student.uny.ac.id",
-    phone: "+62 852 1234 5678",
-    role: "Mahasiswa (S1)",
+    birthdate: "2004-XX-XX",
+    email: "nanikwijayanti06@gmail.com",
+    phone: "08XXXXXXXXXX",
+    role: "Mahasiswa",
     department: "Teknik Industri",
     university: "Universitas Negeri Yogyakarta",
   });
 
-  const activityHistory = [
+  // =========================================================
+  // ACTIVITY DATA
+  // =========================================================
+
+  const [activities, setActivities] = useState([
     {
       id: 1,
-      name: "Membawa Bekal & Tumbler ke Kampus",
-      status: "Tervalidasi",
+      title: "Membawa Bekal & Tumbler ke Kampus",
       category: "Konsumsi",
       date: "2026-09-10",
-      detail:
-        "Menghemat penggunaan 2 kemasan plastik sekali pakai di kantin FT.",
-      reduction: "-0.2 kg CO2",
+      reduction: 0.2,
+      status: "Tervalidasi",
+      description:
+        "Mengurangi penggunaan kemasan sekali pakai dengan membawa bekal dan tumbler.",
+      evidenceUrl: null,
+      evidenceName: "",
     },
     {
       id: 2,
-      name: "Submit Tugas Paperless (Ergonomi)",
-      status: "Tervalidasi",
+      title: "Submit Tugas Paperless",
       category: "Digital",
       date: "2026-09-09",
-      detail: "Mengumpulkan laporan via LMS tanpa cetak kertas 15 lembar.",
-      reduction: "-0.5 kg CO2",
+      reduction: 0.5,
+      status: "Tervalidasi",
+      description:
+        "Mengumpulkan tugas secara digital untuk mengurangi penggunaan kertas.",
+      evidenceUrl: null,
+      evidenceName: "",
     },
     {
       id: 3,
-      name: "Menggunakan Transportasi Umum (TransJogja)",
-      status: "Menunggu",
+      title: "Menggunakan Transportasi Umum",
       category: "Transportasi",
       date: "2026-09-08",
-      detail: "Perjalanan kampus menggunakan bus umum TransJogja.",
-      reduction: "-1.2 kg CO2",
+      reduction: 1.2,
+      status: "Menunggu",
+      description:
+        "Menggunakan TransJogja sebagai alternatif transportasi menuju kampus.",
+      evidenceUrl: null,
+      evidenceName: "",
     },
     {
       id: 4,
-      name: "Daur Ulang Kertas Bekas Skripsi",
-      status: "Tervalidasi",
+      title: "Daur Ulang Kertas Bekas Skripsi",
       category: "Daur Ulang",
       date: "2026-09-05",
-      detail: "Menyetorkan 3 kg kertas bekas ke Bank Sampah Fakultas.",
-      reduction: "-0.8 kg CO2",
+      reduction: 0.8,
+      status: "Tervalidasi",
+      description:
+        "Memanfaatkan kembali kertas bekas yang masih layak digunakan.",
+      evidenceUrl: null,
+      evidenceName: "",
     },
+  ]);
+
+  // =========================================================
+  // UI STATE
+  // =========================================================
+
+  const [activeTab, setActiveTab] = useState("aktivitas");
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Semua");
+
+  const [selectedActivity, setSelectedActivity] = useState(null);
+
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const [editingActivity, setEditingActivity] = useState(null);
+
+  // =========================================================
+  // FORM ACTIVITY
+  // =========================================================
+
+  const emptyActivityForm = {
+    title: "",
+    category: "Konsumsi",
+    date: new Date().toISOString().split("T")[0],
+    reduction: "",
+    description: "",
+    evidenceUrl: null,
+    evidenceName: "",
+  };
+
+  const [activityForm, setActivityForm] = useState(emptyActivityForm);
+
+  // =========================================================
+  // FORM PROFILE
+  // =========================================================
+
+  const [profileForm, setProfileForm] = useState(studentData);
+
+  // =========================================================
+  // CATEGORY
+  // =========================================================
+
+  const categories = [
+    "Semua",
+    "Konsumsi",
+    "Digital",
+    "Transportasi",
+    "Daur Ulang",
+    "Energi",
   ];
 
-  const filteredActivities = activityHistory.filter((item) => {
-    const matchesSearch =
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "Semua" || item.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // =========================================================
+  // FILTER ACTIVITY
+  // =========================================================
+
+  const filteredActivities = useMemo(() => {
+    return activities.filter((activity) => {
+      const matchesSearch =
+        activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        activity.category.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        selectedCategory === "Semua" || activity.category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [activities, searchTerm, selectedCategory]);
+
+  // =========================================================
+  // SUMMARY
+  // =========================================================
+
+  const totalReduction = useMemo(() => {
+    return activities.reduce(
+      (total, activity) => total + Number(activity.reduction || 0),
+      0,
+    );
+  }, [activities]);
+
+  const validatedCount = activities.filter(
+    (activity) => activity.status === "Tervalidasi",
+  ).length;
+
+  const pendingCount = activities.filter(
+    (activity) => activity.status === "Menunggu",
+  ).length;
+
+  // =========================================================
+  // FORMAT DATE
+  // =========================================================
+
+  const formatDate = (date) => {
+    if (!date) return "-";
+
+    const d = new Date(date);
+
+    return d.toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  // =========================================================
+  // OPEN CREATE MODAL
+  // =========================================================
+
+  const openCreateActivity = () => {
+    setEditingActivity(null);
+    setActivityForm({
+      ...emptyActivityForm,
+      date: new Date().toISOString().split("T")[0],
+    });
+    setIsActivityModalOpen(true);
+  };
+
+  // =========================================================
+  // OPEN EDIT MODAL
+  // =========================================================
+
+  const openEditActivity = (activity) => {
+    setEditingActivity(activity);
+
+    setActivityForm({
+      title: activity.title,
+      category: activity.category,
+      date: activity.date,
+      reduction: activity.reduction,
+      description: activity.description,
+      evidenceUrl: activity.evidenceUrl,
+      evidenceName: activity.evidenceName,
+    });
+
+    setIsActivityModalOpen(true);
+  };
+
+  // =========================================================
+  // HANDLE INPUT
+  // =========================================================
+
+  const handleActivityChange = (e) => {
+    const { name, value } = e.target;
+
+    setActivityForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // =========================================================
+  // HANDLE IMAGE
+  // =========================================================
+
+  const handleEvidenceUpload = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+
+    setActivityForm((prev) => ({
+      ...prev,
+      evidenceUrl: imageUrl,
+      evidenceName: file.name,
+    }));
+  };
+
+  // =========================================================
+  // SAVE ACTIVITY
+  // =========================================================
+
+  const handleSaveActivity = (e) => {
+    e.preventDefault();
+
+    if (!activityForm.title.trim()) {
+      alert("Nama aktivitas belum diisi.");
+      return;
+    }
+
+    if (!activityForm.date) {
+      alert("Tanggal aktivitas belum diisi.");
+      return;
+    }
+
+    const newActivity = {
+      id: editingActivity ? editingActivity.id : Date.now(),
+      title: activityForm.title.trim(),
+      category: activityForm.category,
+      date: activityForm.date,
+      reduction: Number(activityForm.reduction || 0),
+      description: activityForm.description.trim(),
+      evidenceUrl: activityForm.evidenceUrl,
+      evidenceName: activityForm.evidenceName,
+      status: editingActivity ? editingActivity.status : "Menunggu",
+    };
+
+    if (editingActivity) {
+      setActivities((prev) =>
+        prev.map((activity) =>
+          activity.id === editingActivity.id ? newActivity : activity,
+        ),
+      );
+    } else {
+      setActivities((prev) => [newActivity, ...prev]);
+    }
+
+    setIsActivityModalOpen(false);
+    setEditingActivity(null);
+    setActivityForm(emptyActivityForm);
+  };
+
+  // =========================================================
+  // DELETE ACTIVITY
+  // =========================================================
+
+  const handleDeleteActivity = (id) => {
+    const activity = activities.find((item) => item.id === id);
+
+    if (!activity) return;
+
+    const confirmed = window.confirm(`Hapus aktivitas "${activity.title}"?`);
+
+    if (!confirmed) return;
+
+    setActivities((prev) => prev.filter((activity) => activity.id !== id));
+
+    if (selectedActivity?.id === id) {
+      setSelectedActivity(null);
+      setIsDetailModalOpen(false);
+    }
+  };
+
+  // =========================================================
+  // DETAIL
+  // =========================================================
+
+  const openDetail = (activity) => {
+    setSelectedActivity(activity);
+    setIsDetailModalOpen(true);
+  };
+
+  // =========================================================
+  // PROFILE EDIT
+  // =========================================================
+
+  const openProfileEdit = () => {
+    setProfileForm(studentData);
+    setIsProfileModalOpen(true);
+  };
+
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+
+    setProfileForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSaveProfile = (e) => {
     e.preventDefault();
-    setIsEditModalOpen(false);
+
+    setStudentData(profileForm);
+    setIsProfileModalOpen(false);
   };
 
+  // =========================================================
+  // STATUS
+  // =========================================================
+
+  const StatusBadge = ({ status }) => {
+    const validated = status === "Tervalidasi";
+
+    return (
+      <span
+        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+          validated
+            ? "bg-[#E8F2EB] text-[#21613C]"
+            : "bg-[#FFF5D9] text-[#9A6A00]"
+        }`}
+      >
+        {validated ? <CheckCircle2 size={13} /> : <Clock3 size={13} />}
+
+        {status}
+      </span>
+    );
+  };
+
+  // =========================================================
+  // RENDER
+  // =========================================================
+
   return (
-    <div className="w-full min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
-      {/* Back Button */}
-      <div className="mb-4">
-        <button
-          onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </button>
-      </div>
+    <div className="min-h-screen bg-[#F5F7F3] text-[#17231C]">
+      {/* =====================================================
+          PROFILE HEADER
+      ===================================================== */}
 
-      {/* Main Container - Full Width */}
-      <div className="w-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        {/* Banner Hijau Solid */}
-        <div className="h-40 md:h-48 bg-[#1e584b] w-full relative"></div>
+      <section className="px-5 md:px-8 pt-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-[#173D29] rounded-2xl overflow-hidden">
+            <div className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex items-center gap-5">
+                  {/* FOTO PROFIL */}
+                  <div className="relative w-[96px] h-[96px] shrink-0">
+                    <div className="w-[96px] h-[96px] rounded-full overflow-hidden border-4 border-white bg-[#E8EFEA] shadow-lg">
+                      <img
+                        src={profileAvatar}
+                        alt="Foto profil"
+                        className="w-full h-full object-cover"
+                        style={{
+                          display: "block",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      />
+                    </div>
 
-        {/* Profile Header Info */}
-        <div className="px-6 md:px-10 pb-6 relative">
-          {/* Avatar / Profil Foto */}
-          <div className="absolute -top-16 left-6 md:left-10">
-            <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-white shadow-md overflow-hidden bg-slate-200">
-              <img
-                src={profileAvatar}
-                alt="Profile"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.style.display = "none";
-                  e.target.nextSibling.style.display = "flex";
-                }}
-              />
-              <div
-                className="w-full h-full bg-emerald-700 text-white font-bold text-2xl flex items-center justify-center"
-                style={{ display: "none" }}
-              >
-                {studentData.firstName.charAt(0)}
-                {studentData.lastName.charAt(0)}
+                    <button
+                      type="button"
+                      onClick={openProfileEdit}
+                      className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-[#F4C95D] text-[#173D29] border-2 border-[#173D29] flex items-center justify-center hover:bg-[#E8B944] transition"
+                      title="Edit profil"
+                    >
+                      <Pencil size={14} />
+                    </button>
+                  </div>
+
+                  {/* INFORMASI PROFIL */}
+
+                  <div className="min-w-0">
+                    <p className="text-[11px] tracking-[0.16em] uppercase text-[#BFD0C5] mb-1">
+                      Profil Mahasiswa
+                    </p>
+
+                    <h1 className="text-2xl md:text-3xl font-semibold text-white truncate">
+                      {studentData.name}
+                    </h1>
+
+                    <p className="text-sm text-[#D6E2DA] mt-1">
+                      {studentData.nim} · {studentData.department}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      <span className="px-3 py-1 rounded-full bg-white/10 text-xs text-white">
+                        {studentData.status}
+                      </span>
+
+                      <span className="px-3 py-1 rounded-full bg-[#F4C95D] text-[#173D29] text-xs font-semibold">
+                        ECODAS Member
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* EDIT BUTTON */}
+
+                <button
+                  onClick={openProfileEdit}
+                  className="self-start md:self-center inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white text-[#173D29] text-sm font-medium hover:bg-[#EEF3EF] transition"
+                >
+                  <Pencil size={16} />
+                  Edit profil
+                </button>
+              </div>
+            </div>
+
+            {/* QUICK PROFILE INFO */}
+
+            <div className="border-t border-white/10 grid grid-cols-2 md:grid-cols-4">
+              <div className="p-4 md:px-6">
+                <p className="text-[11px] uppercase tracking-wide text-[#AFC3B6]">
+                  Program Studi
+                </p>
+                <p className="text-sm text-white mt-1 font-medium">
+                  {studentData.department}
+                </p>
+              </div>
+
+              <div className="p-4 md:px-6 border-l border-white/10">
+                <p className="text-[11px] uppercase tracking-wide text-[#AFC3B6]">
+                  Universitas
+                </p>
+                <p className="text-sm text-white mt-1 font-medium">
+                  {studentData.university}
+                </p>
+              </div>
+
+              <div className="p-4 md:px-6 border-t md:border-t-0 md:border-l border-white/10">
+                <p className="text-[11px] uppercase tracking-wide text-[#AFC3B6]">
+                  Aktivitas
+                </p>
+                <p className="text-sm text-white mt-1 font-medium">
+                  {activities.length} tercatat
+                </p>
+              </div>
+
+              <div className="p-4 md:px-6 border-l border-white/10 border-t md:border-t-0">
+                <p className="text-[11px] uppercase tracking-wide text-[#AFC3B6]">
+                  Estimasi reduksi
+                </p>
+                <p className="text-sm text-white mt-1 font-medium">
+                  {totalReduction.toFixed(1)} kg CO₂
+                </p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Action Buttons & Profile Details */}
-          <div className="pt-16 flex flex-col md:flex-row md:items-start justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">
-                {studentData.lastName}, {studentData.firstName}
-              </h1>
-              <p className="text-xs text-slate-500 mt-1">
-                {studentData.role} in {studentData.department} |{" "}
-                {studentData.university}
-              </p>
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
 
-              {/* Contact Chips */}
-              <div className="flex flex-wrap items-center gap-2 mt-3">
-                <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1 rounded-full text-xs text-slate-600">
-                  <Mail className="w-3.5 h-3.5 text-slate-400" />
-                  <span>{studentData.email}</span>
-                </div>
-                <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1 rounded-full text-xs text-slate-600">
-                  <Phone className="w-3.5 h-3.5 text-slate-400" />
-                  <span>{studentData.phone}</span>
-                </div>
-              </div>
-            </div>
+      <main className="px-5 md:px-8 py-6">
+        <div className="max-w-7xl mx-auto">
+          {/* TAB */}
 
-            {/* Dropdown Actions */}
-            <div className="relative self-start">
+          <div className="border-b border-[#DCE3DE] mb-6">
+            <div className="flex gap-7">
               <button
-                onClick={() => setIsActionsOpen(!isActionsOpen)}
-                className="px-4 py-2 bg-[#1e584b] hover:bg-[#17453b] text-white rounded-lg text-xs font-semibold shadow-sm flex items-center gap-2 transition-colors"
+                onClick={() => setActiveTab("aktivitas")}
+                className={`pb-3 text-sm font-medium border-b-2 transition ${
+                  activeTab === "aktivitas"
+                    ? "border-[#173D29] text-[#173D29]"
+                    : "border-transparent text-[#718078]"
+                }`}
               >
-                Actions <ChevronDown className="w-3.5 h-3.5" />
+                Aktivitas saya
               </button>
 
-              {isActionsOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-30 text-xs">
-                  <button
-                    onClick={() => {
-                      setIsEditModalOpen(true);
-                      setIsActionsOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-slate-700 hover:bg-slate-50 flex items-center gap-2"
-                  >
-                    <Edit2 className="w-3.5 h-3.5 text-slate-400" /> Edit
-                    profile
-                  </button>
-                  <button className="w-full text-left px-4 py-2.5 text-slate-700 hover:bg-slate-50 flex items-center gap-2">
-                    <FileText className="w-3.5 h-3.5 text-slate-400" /> Dokumen
-                  </button>
-                  <button className="w-full text-left px-4 py-2.5 text-rose-600 hover:bg-rose-50 flex items-center gap-2">
-                    <LogOut className="w-3.5 h-3.5" /> Log out
-                  </button>
-                </div>
-              )}
+              <button
+                onClick={() => setActiveTab("informasi")}
+                className={`pb-3 text-sm font-medium border-b-2 transition ${
+                  activeTab === "informasi"
+                    ? "border-[#173D29] text-[#173D29]"
+                    : "border-transparent text-[#718078]"
+                }`}
+              >
+                Informasi profil
+              </button>
             </div>
           </div>
-        </div>
 
-        {/* Main Navigation Tabs */}
-        <div className="px-6 md:px-10 border-b border-slate-200 flex gap-2">
-          {["Informasi", "Aktivitas", "Pencapaian"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-5 py-3 text-xs font-bold transition-all relative ${
-                activeTab === tab
-                  ? "text-[#1e584b] border-b-2 border-[#1e584b]"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+          {/* =================================================
+              AKTIVITAS
+          ================================================= */}
 
-        {/* Tab Content Area */}
-        <div className="p-6 md:p-10">
-          {/* TAB INFORMASI (Workable HR Style) */}
-          {activeTab === "Informasi" && (
-            <div className="space-y-6">
-              {/* Sub Navigation & Sensitive Data Toggle Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-4">
-                <div className="flex items-center gap-6 text-xs font-bold text-slate-400">
-                  {["PERSONAL", "AKADEMIK", "BERKAS"].map((sub) => (
+          {activeTab === "aktivitas" && (
+            <>
+              {/* SUMMARY */}
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+                <div className="bg-white border border-[#E1E7E2] rounded-xl p-4">
+                  <p className="text-xs text-[#718078]">Total aktivitas</p>
+                  <p className="text-2xl font-semibold text-[#173D29] mt-1">
+                    {activities.length}
+                  </p>
+                </div>
+
+                <div className="bg-white border border-[#E1E7E2] rounded-xl p-4">
+                  <p className="text-xs text-[#718078]">Tervalidasi</p>
+                  <p className="text-2xl font-semibold text-[#21613C] mt-1">
+                    {validatedCount}
+                  </p>
+                </div>
+
+                <div className="bg-white border border-[#E1E7E2] rounded-xl p-4">
+                  <p className="text-xs text-[#718078]">Menunggu</p>
+                  <p className="text-2xl font-semibold text-[#9A6A00] mt-1">
+                    {pendingCount}
+                  </p>
+                </div>
+
+                <div className="bg-white border border-[#E1E7E2] rounded-xl p-4">
+                  <p className="text-xs text-[#718078]">Estimasi reduksi</p>
+                  <p className="text-2xl font-semibold text-[#173D29] mt-1">
+                    {totalReduction.toFixed(1)}
+                    <span className="text-sm font-normal ml-1">kg CO₂</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* ACTIVITY SECTION */}
+
+              <section className="bg-white border border-[#E1E7E2] rounded-2xl overflow-hidden">
+                {/* HEADER */}
+
+                <div className="p-5 md:p-6 border-b border-[#E7ECE8]">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-lg font-semibold text-[#173D29]">
+                        Riwayat aktivitas
+                      </h2>
+
+                      <p className="text-sm text-[#718078] mt-1">
+                        Catat tindakan konsumsi berkelanjutan yang kamu lakukan.
+                      </p>
+                    </div>
+
                     <button
-                      key={sub}
-                      onClick={() => setActiveSubTab(sub)}
-                      className={`tracking-wider ${
-                        activeSubTab === sub
-                          ? "text-slate-900 border-b-2 border-slate-900 pb-1"
-                          : "hover:text-slate-600"
-                      }`}
+                      onClick={openCreateActivity}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#173D29] text-white text-sm font-medium hover:bg-[#24583D] transition"
                     >
-                      {sub}
+                      <Plus size={17} />
+                      Tambah aktivitas
                     </button>
-                  ))}
+                  </div>
+
+                  {/* FILTER */}
+
+                  <div className="flex flex-col md:flex-row gap-3 mt-5">
+                    <div className="relative flex-1">
+                      <Search
+                        size={17}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[#89968F]"
+                      />
+
+                      <input
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Cari aktivitas..."
+                        className="w-full pl-10 pr-4 py-2.5 border border-[#DCE3DE] rounded-lg text-sm outline-none focus:border-[#173D29] focus:ring-1 focus:ring-[#173D29]"
+                      />
+                    </div>
+
+                    <div className="relative">
+                      <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="appearance-none w-full md:w-48 px-3 pr-9 py-2.5 border border-[#DCE3DE] rounded-lg bg-white text-sm outline-none focus:border-[#173D29]"
+                      >
+                        {categories.map((category) => (
+                          <option key={category}>{category}</option>
+                        ))}
+                      </select>
+
+                      <ChevronDown
+                        size={16}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#718078]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* TABLE */}
+
+                {filteredActivities.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[760px]">
+                      <thead className="bg-[#F8FAF8]">
+                        <tr className="text-left">
+                          <th className="px-5 py-3 text-[11px] uppercase tracking-wide text-[#718078] font-medium">
+                            Aktivitas
+                          </th>
+
+                          <th className="px-4 py-3 text-[11px] uppercase tracking-wide text-[#718078] font-medium">
+                            Kategori
+                          </th>
+
+                          <th className="px-4 py-3 text-[11px] uppercase tracking-wide text-[#718078] font-medium">
+                            Tanggal
+                          </th>
+
+                          <th className="px-4 py-3 text-[11px] uppercase tracking-wide text-[#718078] font-medium">
+                            Reduksi
+                          </th>
+
+                          <th className="px-4 py-3 text-[11px] uppercase tracking-wide text-[#718078] font-medium">
+                            Status
+                          </th>
+
+                          <th className="px-5 py-3 text-right text-[11px] uppercase tracking-wide text-[#718078] font-medium">
+                            Aksi
+                          </th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {filteredActivities.map((activity) => (
+                          <tr
+                            key={activity.id}
+                            className="border-t border-[#EDF0ED] hover:bg-[#FAFCFA] transition"
+                          >
+                            {/* ACTIVITY */}
+
+                            <td className="px-5 py-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-lg bg-[#EAF1EB] flex items-center justify-center shrink-0">
+                                  <Leaf size={17} className="text-[#24583D]" />
+                                </div>
+
+                                <div className="min-w-0">
+                                  <p className="text-sm font-medium text-[#1E2C24]">
+                                    {activity.title}
+                                  </p>
+
+                                  <p className="text-xs text-[#89968F] mt-0.5">
+                                    {activity.evidenceUrl
+                                      ? "Bukti tersedia"
+                                      : "Belum ada bukti"}
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+
+                            {/* CATEGORY */}
+
+                            <td className="px-4 py-4">
+                              <span className="text-sm text-[#4C5B52]">
+                                {activity.category}
+                              </span>
+                            </td>
+
+                            {/* DATE */}
+
+                            <td className="px-4 py-4">
+                              <span className="text-sm text-[#4C5B52]">
+                                {formatDate(activity.date)}
+                              </span>
+                            </td>
+
+                            {/* REDUCTION */}
+
+                            <td className="px-4 py-4">
+                              <span className="text-sm font-medium text-[#21613C]">
+                                -{Number(activity.reduction).toFixed(1)} kg
+                              </span>
+                            </td>
+
+                            {/* STATUS */}
+
+                            <td className="px-4 py-4">
+                              <StatusBadge status={activity.status} />
+                            </td>
+
+                            {/* ACTION */}
+
+                            <td className="px-5 py-4">
+                              <div className="flex items-center justify-end gap-1">
+                                <button
+                                  onClick={() => openDetail(activity)}
+                                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[#66736B] hover:bg-[#EAF1EB] hover:text-[#173D29]"
+                                  title="Lihat detail"
+                                >
+                                  <Eye size={16} />
+                                </button>
+
+                                <button
+                                  onClick={() => openEditActivity(activity)}
+                                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[#66736B] hover:bg-[#EAF1EB] hover:text-[#173D29]"
+                                  title="Edit"
+                                >
+                                  <Pencil size={16} />
+                                </button>
+
+                                <button
+                                  onClick={() =>
+                                    handleDeleteActivity(activity.id)
+                                  }
+                                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[#8A5C5C] hover:bg-[#F8EAEA] hover:text-[#A33A3A]"
+                                  title="Hapus"
+                                >
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="py-16 text-center px-6">
+                    <div className="w-12 h-12 rounded-full bg-[#EAF1EB] mx-auto flex items-center justify-center">
+                      <Search size={20} className="text-[#24583D]" />
+                    </div>
+
+                    <h3 className="font-medium text-[#173D29] mt-4">
+                      Aktivitas tidak ditemukan
+                    </h3>
+
+                    <p className="text-sm text-[#718078] mt-1">
+                      Coba ubah kata kunci atau kategori pencarian.
+                    </p>
+                  </div>
+                )}
+              </section>
+            </>
+          )}
+
+          {/* =================================================
+              INFORMASI PROFIL
+          ================================================= */}
+
+          {activeTab === "informasi" && (
+            <section className="bg-white border border-[#E1E7E2] rounded-2xl overflow-hidden">
+              <div className="p-5 md:p-6 border-b border-[#E7ECE8] flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-[#173D29]">
+                    Informasi profil
+                  </h2>
+
+                  <p className="text-sm text-[#718078] mt-1">
+                    Informasi dasar akun dan identitas mahasiswa.
+                  </p>
                 </div>
 
                 <button
-                  onClick={() => setShowSensitive(!showSensitive)}
-                  className="flex items-center gap-2 text-xs font-medium text-slate-500 hover:text-slate-800"
+                  onClick={openProfileEdit}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-[#D5DED8] text-[#173D29] text-sm font-medium hover:bg-[#F3F7F4]"
                 >
-                  {showSensitive ? (
-                    <EyeOff className="w-4 h-4 text-slate-400" />
-                  ) : (
-                    <Eye className="w-4 h-4 text-slate-400" />
-                  )}
-                  <span>Show sensitive data</span>
-                  <div
-                    className={`w-8 h-4 rounded-full p-0.5 transition-colors ${
-                      showSensitive ? "bg-[#1e584b]" : "bg-slate-300"
-                    }`}
-                  >
-                    <div
-                      className={`w-3 h-3 bg-white rounded-full transition-transform ${
-                        showSensitive ? "translate-x-4" : "translate-x-0"
-                      }`}
-                    ></div>
-                  </div>
+                  <Pencil size={15} />
+                  Edit
                 </button>
               </div>
 
-              {/* Sub-Tab: PERSONAL */}
-              {activeSubTab === "PERSONAL" && (
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-xs font-bold text-slate-900 mb-4">
-                      Basic
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-8 text-xs">
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          First name
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {studentData.firstName}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          Middle name
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {studentData.middleName}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          Last name
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {studentData.lastName}
-                        </span>
-                      </div>
+              <div className="grid md:grid-cols-2">
+                <InfoItem
+                  icon={<UserRound size={17} />}
+                  label="Nama lengkap"
+                  value={studentData.name}
+                />
 
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          Preferred name
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {studentData.preferredName}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          NIM (Student ID)
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {showSensitive ? studentData.nim : "•••••••••••"}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          Status
-                        </span>
-                        <span className="text-emerald-600 font-semibold">
-                          {studentData.status}
-                        </span>
-                      </div>
+                <InfoItem
+                  icon={<GraduationCap size={17} />}
+                  label="NIM"
+                  value={studentData.nim}
+                />
 
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          Country
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {studentData.country}
-                        </span>
-                      </div>
-                      <div className="md:col-span-2">
-                        <span className="text-slate-400 block mb-1">
-                          Address
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {showSensitive
-                            ? studentData.address
-                            : "••••••••••••••••••••••••••••••••••••••••"}
-                        </span>
-                      </div>
+                <InfoItem
+                  icon={<GraduationCap size={17} />}
+                  label="Program studi"
+                  value={studentData.department}
+                />
 
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          Gender
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {studentData.gender}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-slate-400 block mb-1">
-                          Birthdate
-                        </span>
-                        <span className="text-slate-800 font-medium">
-                          {showSensitive
-                            ? studentData.birthdate
-                            : "••••••••••••"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+                <InfoItem
+                  icon={<GraduationCap size={17} />}
+                  label="Universitas"
+                  value={studentData.university}
+                />
 
-              {/* Sub-Tab: AKADEMIK */}
-              {activeSubTab === "AKADEMIK" && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-                  <div>
-                    <span className="text-slate-400 block mb-1">
-                      Program Studi
-                    </span>
-                    <span className="text-slate-800 font-medium">
-                      {studentData.department}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block mb-1">Jenjang</span>
-                    <span className="text-slate-800 font-medium">
-                      Sarjana (S1)
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block mb-1">
-                      Universitas
-                    </span>
-                    <span className="text-slate-800 font-medium">
-                      {studentData.university}
-                    </span>
-                  </div>
-                </div>
-              )}
+                <InfoItem
+                  icon={<Mail size={17} />}
+                  label="Email"
+                  value={studentData.email}
+                />
 
-              {/* Sub-Tab: BERKAS */}
-              {activeSubTab === "BERKAS" && (
-                <div className="text-xs text-slate-500">
-                  Tidak ada dokumen sensitif yang diunggah.
-                </div>
-              )}
-            </div>
-          )}
+                <InfoItem
+                  icon={<Phone size={17} />}
+                  label="Nomor telepon"
+                  value={studentData.phone}
+                />
 
-          {/* TAB AKTIVITAS */}
-          {activeTab === "Aktivitas" && (
-            <div className="space-y-4">
-              {/* Search & Filter */}
-              <div className="flex gap-2 max-w-md">
-                <div className="relative flex-1">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Cari aktivitas..."
-                    className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs bg-white focus:outline-none focus:border-[#1e584b]"
-                  />
-                </div>
+                <InfoItem
+                  icon={<MapPin size={17} />}
+                  label="Alamat"
+                  value={studentData.address}
+                />
 
-                <div className="relative">
-                  <button
-                    onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50"
-                  >
-                    <Filter className="w-4 h-4" />
-                    <span>{selectedCategory}</span>
-                  </button>
-
-                  {isFilterOpen && (
-                    <div className="absolute right-0 mt-1 w-40 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-30 text-xs">
-                      {[
-                        "Semua",
-                        "Konsumsi",
-                        "Digital",
-                        "Transportasi",
-                        "Daur Ulang",
-                      ].map((cat) => (
-                        <button
-                          key={cat}
-                          onClick={() => {
-                            setSelectedCategory(cat);
-                            setIsFilterOpen(false);
-                          }}
-                          className="w-full text-left px-3 py-2 hover:bg-slate-50 text-slate-700"
-                        >
-                          {cat}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <InfoItem
+                  icon={<CalendarDays size={17} />}
+                  label="Tanggal lahir"
+                  value={studentData.birthdate}
+                />
               </div>
-
-              {/* Tabel Tanpa Border Box Berlebih pada Status */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase">
-                      <th className="py-3 px-2">Aktivitas</th>
-                      <th className="py-3 px-2">Kategori</th>
-                      <th className="py-3 px-2">Status</th>
-                      <th className="py-3 px-2 text-right">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-xs">
-                    {filteredActivities.map((act) => (
-                      <tr key={act.id} className="hover:bg-slate-50/50">
-                        <td className="py-3.5 px-2 font-medium text-slate-800">
-                          {act.name}
-                        </td>
-                        <td className="py-3.5 px-2 text-slate-500">
-                          {act.category}
-                        </td>
-                        {/* Status berupa TULISAN BERWARNA TANPA BOX / BORDER */}
-                        <td className="py-3.5 px-2 font-semibold">
-                          <span
-                            className={
-                              act.status === "Tervalidasi"
-                                ? "text-emerald-600"
-                                : "text-amber-600"
-                            }
-                          >
-                            {act.status}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-2 text-right">
-                          <button
-                            onClick={() => setSelectedActivity(act)}
-                            className="text-[#1e584b] font-bold inline-flex items-center gap-0.5 hover:underline"
-                          >
-                            View <ArrowUpRight className="w-3.5 h-3.5" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* TAB PENCAPAIAN (Card Hijau Solid Tanpa Garis Putih) */}
-          {activeTab === "Pencapaian" && (
-            <div className="space-y-4">
-              <div className="bg-[#1e584b] rounded-xl p-6 text-white relative overflow-hidden">
-                <Award className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10" />
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-200">
-                  Status ECODAS
-                </span>
-                <h3 className="text-2xl font-bold flex items-center gap-2 mt-1">
-                  Eco Expert{" "}
-                  <Star className="w-6 h-6 fill-amber-300 text-amber-300" />
-                </h3>
-                <div className="mt-6 grid grid-cols-2 gap-4 border-t border-emerald-700/60 pt-4">
-                  <div>
-                    <p className="text-xs text-emerald-200">Poin Hijau</p>
-                    <p className="text-xl font-bold mt-0.5">1,240 pts</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-emerald-200">Reduksi</p>
-                    <p className="text-xl font-bold mt-0.5">18.5 kg CO₂</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </section>
           )}
         </div>
-      </div>
+      </main>
 
-      {/* MODAL VIEW AKTIVITAS */}
-      {selectedActivity && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-sm p-5 text-xs shadow-xl">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
-              <h3 className="font-bold text-slate-900 text-sm">
-                {selectedActivity.name}
-              </h3>
-              <button onClick={() => setSelectedActivity(null)}>
-                <X className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+      {/* =====================================================
+          ACTIVITY MODAL
+      ===================================================== */}
+
+      {isActivityModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+            {/* MODAL HEADER */}
+
+            <div className="px-6 py-5 border-b border-[#E5EAE6] flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.12em] text-[#718078]">
+                  {editingActivity ? "Perbarui catatan" : "Catatan aktivitas"}
+                </p>
+
+                <h2 className="text-xl font-semibold text-[#173D29] mt-1">
+                  {editingActivity ? "Edit aktivitas" : "Tambah aktivitas"}
+                </h2>
+              </div>
+
+              <button
+                onClick={() => setIsActivityModalOpen(false)}
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-[#718078] hover:bg-[#F0F3F1]"
+              >
+                <X size={19} />
               </button>
             </div>
-            <div className="py-4 space-y-2.5">
-              <p>
-                <span className="text-slate-400">Kategori:</span>{" "}
-                <span className="font-semibold text-slate-700">
-                  {selectedActivity.category}
-                </span>
-              </p>
-              <p>
-                <span className="text-slate-400">Reduksi:</span>{" "}
-                <strong className="text-emerald-600 font-bold">
-                  {selectedActivity.reduction}
-                </strong>
-              </p>
-              <p className="bg-slate-50 p-3 rounded-xl text-slate-600 leading-relaxed">
-                {selectedActivity.detail}
-              </p>
-            </div>
-            <button
-              onClick={() => setSelectedActivity(null)}
-              className="w-full py-2 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 transition-colors"
-            >
-              Tutup
-            </button>
+
+            {/* FORM */}
+
+            <form onSubmit={handleSaveActivity} className="p-6 space-y-5">
+              {/* TITLE */}
+
+              <div>
+                <label className="block text-sm font-medium text-[#26352D] mb-2">
+                  Nama aktivitas
+                </label>
+
+                <input
+                  name="title"
+                  value={activityForm.title}
+                  onChange={handleActivityChange}
+                  placeholder="Contoh: Membawa tumbler ke kampus"
+                  className="w-full px-3.5 py-3 border border-[#D8E0DA] rounded-lg text-sm outline-none focus:border-[#173D29] focus:ring-1 focus:ring-[#173D29]"
+                />
+              </div>
+
+              {/* CATEGORY + DATE */}
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#26352D] mb-2">
+                    Kategori
+                  </label>
+
+                  <select
+                    name="category"
+                    value={activityForm.category}
+                    onChange={handleActivityChange}
+                    className="w-full px-3.5 py-3 border border-[#D8E0DA] rounded-lg text-sm bg-white outline-none focus:border-[#173D29]"
+                  >
+                    {categories
+                      .filter((category) => category !== "Semua")
+                      .map((category) => (
+                        <option key={category}>{category}</option>
+                      ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#26352D] mb-2">
+                    Tanggal
+                  </label>
+
+                  <input
+                    type="date"
+                    name="date"
+                    value={activityForm.date}
+                    onChange={handleActivityChange}
+                    className="w-full px-3.5 py-3 border border-[#D8E0DA] rounded-lg text-sm outline-none focus:border-[#173D29]"
+                  />
+                </div>
+              </div>
+
+              {/* REDUCTION */}
+
+              <div>
+                <label className="block text-sm font-medium text-[#26352D] mb-2">
+                  Estimasi reduksi karbon
+                </label>
+
+                <div className="relative">
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    name="reduction"
+                    value={activityForm.reduction}
+                    onChange={handleActivityChange}
+                    placeholder="0.0"
+                    className="w-full px-3.5 py-3 pr-20 border border-[#D8E0DA] rounded-lg text-sm outline-none focus:border-[#173D29]"
+                  />
+
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#718078]">
+                    kg CO₂
+                  </span>
+                </div>
+
+                <p className="text-xs text-[#8A968F] mt-1.5">
+                  Nilai ini merupakan estimasi pada prototype.
+                </p>
+              </div>
+
+              {/* DESCRIPTION */}
+
+              <div>
+                <label className="block text-sm font-medium text-[#26352D] mb-2">
+                  Deskripsi
+                </label>
+
+                <textarea
+                  name="description"
+                  value={activityForm.description}
+                  onChange={handleActivityChange}
+                  rows={3}
+                  placeholder="Jelaskan singkat tindakan yang dilakukan..."
+                  className="w-full px-3.5 py-3 border border-[#D8E0DA] rounded-lg text-sm outline-none resize-none focus:border-[#173D29]"
+                />
+              </div>
+
+              {/* EVIDENCE */}
+
+              <div>
+                <label className="block text-sm font-medium text-[#26352D] mb-2">
+                  Bukti aktivitas
+                </label>
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleEvidenceUpload}
+                  className="hidden"
+                />
+
+                {activityForm.evidenceUrl ? (
+                  <div className="border border-[#D8E0DA] rounded-xl overflow-hidden">
+                    <div className="h-48 bg-[#F2F5F2] flex items-center justify-center">
+                      <img
+                        src={activityForm.evidenceUrl}
+                        alt="Bukti aktivitas"
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
+
+                    <div className="p-3 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <FileImage
+                          size={17}
+                          className="text-[#24583D] shrink-0"
+                        />
+
+                        <span className="text-xs text-[#5F6D65] truncate">
+                          {activityForm.evidenceName || "Bukti aktivitas"}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setActivityForm((prev) => ({
+                            ...prev,
+                            evidenceUrl: null,
+                            evidenceName: "",
+                          }))
+                        }
+                        className="text-xs text-[#A33A3A] hover:underline"
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full border border-dashed border-[#BFCBC2] rounded-xl p-7 hover:border-[#173D29] hover:bg-[#F8FAF8] transition text-center"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-[#EAF1EB] mx-auto flex items-center justify-center">
+                      <Upload size={19} className="text-[#24583D]" />
+                    </div>
+
+                    <p className="text-sm font-medium text-[#26352D] mt-3">
+                      Tambahkan foto bukti
+                    </p>
+
+                    <p className="text-xs text-[#89968F] mt-1">
+                      JPG, PNG, atau WEBP
+                    </p>
+                  </button>
+                )}
+              </div>
+
+              {/* STATUS NOTE */}
+
+              <div className="flex gap-3 p-3.5 rounded-lg bg-[#FFF9E8] border border-[#F1E2AF]">
+                <Clock3 size={17} className="text-[#9A6A00] shrink-0 mt-0.5" />
+
+                <p className="text-xs leading-5 text-[#725A19]">
+                  Aktivitas baru akan berstatus <strong>Menunggu</strong> sampai
+                  dilakukan proses verifikasi.
+                </p>
+              </div>
+
+              {/* BUTTON */}
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsActivityModalOpen(false)}
+                  className="px-4 py-2.5 rounded-lg border border-[#D5DED8] text-sm font-medium text-[#526057] hover:bg-[#F4F6F4]"
+                >
+                  Batal
+                </button>
+
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#173D29] text-white text-sm font-medium hover:bg-[#24583D]"
+                >
+                  <Save size={16} />
+                  {editingActivity ? "Simpan perubahan" : "Simpan aktivitas"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
 
-      {/* MODAL EDIT PROFIL */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-sm p-5 text-xs shadow-xl">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
-              <h3 className="font-bold text-slate-900 text-sm">Edit Profil</h3>
-              <button onClick={() => setIsEditModalOpen(false)}>
-                <X className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+      {/* =====================================================
+          DETAIL MODAL
+      ===================================================== */}
+
+      {isDetailModalOpen && selectedActivity && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden">
+            <div className="px-6 py-5 border-b border-[#E5EAE6] flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-[#718078]">
+                  Detail aktivitas
+                </p>
+
+                <h2 className="text-xl font-semibold text-[#173D29] mt-1">
+                  {selectedActivity.title}
+                </h2>
+              </div>
+
+              <button
+                onClick={() => setIsDetailModalOpen(false)}
+                className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-[#F1F4F1]"
+              >
+                <X size={19} />
               </button>
             </div>
-            <form onSubmit={handleSaveProfile} className="py-4 space-y-3">
+
+            <div className="p-6">
+              {/* EVIDENCE IMAGE */}
+
+              {selectedActivity.evidenceUrl ? (
+                <div className="rounded-xl overflow-hidden bg-[#F2F5F2] mb-5">
+                  <img
+                    src={selectedActivity.evidenceUrl}
+                    alt="Bukti aktivitas"
+                    className="w-full max-h-72 object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="h-40 rounded-xl bg-[#F4F6F4] border border-dashed border-[#CDD6CF] flex flex-col items-center justify-center mb-5">
+                  <ImageIcon size={25} className="text-[#9AA69E]" />
+
+                  <p className="text-sm text-[#718078] mt-2">
+                    Belum ada bukti foto
+                  </p>
+                </div>
+              )}
+
+              {/* DETAIL */}
+
+              <div className="space-y-4">
+                <div className="flex justify-between gap-4">
+                  <span className="text-sm text-[#718078]">Kategori</span>
+
+                  <span className="text-sm font-medium text-[#26352D]">
+                    {selectedActivity.category}
+                  </span>
+                </div>
+
+                <div className="flex justify-between gap-4">
+                  <span className="text-sm text-[#718078]">Tanggal</span>
+
+                  <span className="text-sm font-medium text-[#26352D]">
+                    {formatDate(selectedActivity.date)}
+                  </span>
+                </div>
+
+                <div className="flex justify-between gap-4">
+                  <span className="text-sm text-[#718078]">
+                    Estimasi reduksi
+                  </span>
+
+                  <span className="text-sm font-semibold text-[#21613C]">
+                    -{Number(selectedActivity.reduction).toFixed(1)} kg CO₂
+                  </span>
+                </div>
+
+                <div className="flex justify-between gap-4 items-center">
+                  <span className="text-sm text-[#718078]">Status</span>
+
+                  <StatusBadge status={selectedActivity.status} />
+                </div>
+
+                <div className="pt-3 border-t border-[#E8ECE9]">
+                  <p className="text-sm text-[#718078] mb-2">Deskripsi</p>
+
+                  <p className="text-sm leading-6 text-[#39483F]">
+                    {selectedActivity.description || "Tidak ada deskripsi."}
+                  </p>
+                </div>
+              </div>
+
+              {/* ACTION */}
+
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  onClick={() => {
+                    setIsDetailModalOpen(false);
+                    openEditActivity(selectedActivity);
+                  }}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#D5DED8] text-sm font-medium text-[#173D29]"
+                >
+                  <Pencil size={15} />
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => handleDeleteActivity(selectedActivity.id)}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#F8EAEA] text-[#A33A3A] text-sm font-medium"
+                >
+                  <Trash2 size={15} />
+                  Hapus
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================
+          PROFILE EDIT MODAL
+      ===================================================== */}
+
+      {isProfileModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="px-6 py-5 border-b border-[#E5EAE6] flex items-center justify-between">
               <div>
-                <label className="block text-slate-400 text-[10px] font-bold mb-1 uppercase">
-                  Nama Depan
-                </label>
-                <input
-                  type="text"
-                  value={studentData.firstName}
-                  onChange={(e) =>
-                    setStudentData({
-                      ...studentData,
-                      firstName: e.target.value,
-                    })
-                  }
-                  className="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#1e584b]"
+                <p className="text-xs uppercase tracking-wide text-[#718078]">
+                  Pengaturan akun
+                </p>
+
+                <h2 className="text-xl font-semibold text-[#173D29] mt-1">
+                  Edit profil
+                </h2>
+              </div>
+
+              <button
+                onClick={() => setIsProfileModalOpen(false)}
+                className="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-[#F1F4F1]"
+              >
+                <X size={19} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveProfile} className="p-6 space-y-5">
+              <ProfileInput
+                label="Nama lengkap"
+                name="name"
+                value={profileForm.name}
+                onChange={handleProfileChange}
+              />
+
+              <ProfileInput
+                label="NIM"
+                name="nim"
+                value={profileForm.nim}
+                onChange={handleProfileChange}
+              />
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <ProfileInput
+                  label="Program studi"
+                  name="department"
+                  value={profileForm.department}
+                  onChange={handleProfileChange}
+                />
+
+                <ProfileInput
+                  label="Universitas"
+                  name="university"
+                  value={profileForm.university}
+                  onChange={handleProfileChange}
                 />
               </div>
-              <div>
-                <label className="block text-slate-400 text-[10px] font-bold mb-1 uppercase">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={studentData.email}
-                  onChange={(e) =>
-                    setStudentData({ ...studentData, email: e.target.value })
-                  }
-                  className="w-full p-2.5 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#1e584b]"
-                />
-              </div>
-              <div className="flex justify-end gap-2 pt-3">
+
+              <ProfileInput
+                label="Email"
+                name="email"
+                value={profileForm.email}
+                onChange={handleProfileChange}
+              />
+
+              <ProfileInput
+                label="Nomor telepon"
+                name="phone"
+                value={profileForm.phone}
+                onChange={handleProfileChange}
+              />
+
+              <ProfileInput
+                label="Alamat"
+                name="address"
+                value={profileForm.address}
+                onChange={handleProfileChange}
+              />
+
+              <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="px-4 py-2 border border-slate-200 rounded-xl text-slate-600 font-semibold hover:bg-slate-50"
+                  onClick={() => setIsProfileModalOpen(false)}
+                  className="px-4 py-2.5 rounded-lg border border-[#D5DED8] text-sm font-medium text-[#526057]"
                 >
                   Batal
                 </button>
+
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#1e584b] text-white rounded-xl font-semibold hover:bg-[#17453b]"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#173D29] text-white text-sm font-medium"
                 >
-                  Simpan
+                  <Save size={16} />
+                  Simpan profil
                 </button>
               </div>
             </form>
@@ -633,4 +1335,51 @@ export default function ProfileContent() {
       )}
     </div>
   );
-}
+};
+
+// =============================================================
+// INFO ITEM
+// =============================================================
+
+const InfoItem = ({ icon, label, value }) => {
+  return (
+    <div className="p-5 border-b border-[#E7ECE8] md:nth-[2n]:border-l">
+      <div className="flex gap-3">
+        <div className="w-9 h-9 rounded-lg bg-[#EAF1EB] text-[#24583D] flex items-center justify-center shrink-0">
+          {icon}
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-xs text-[#89968F]">{label}</p>
+
+          <p className="text-sm font-medium text-[#29372F] mt-1 break-words">
+            {value || "-"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// =============================================================
+// PROFILE INPUT
+// =============================================================
+
+const ProfileInput = ({ label, name, value, onChange }) => {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-[#26352D] mb-2">
+        {label}
+      </label>
+
+      <input
+        name={name}
+        value={value || ""}
+        onChange={onChange}
+        className="w-full px-3.5 py-3 border border-[#D8E0DA] rounded-lg text-sm outline-none focus:border-[#173D29] focus:ring-1 focus:ring-[#173D29]"
+      />
+    </div>
+  );
+};
+
+export default ProfileContent;

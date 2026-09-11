@@ -1,0 +1,1329 @@
+/* =========================================================
+   ECODAS — ADMIN
+   ACTIVITY REVIEW & VALIDATION
+   ========================================================= */
+
+.review-page {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  color: #173b29;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.review-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 20px;
+}
+
+.review-header-copy {
+  max-width: 780px;
+}
+
+.review-eyebrow,
+.review-section-kicker {
+  display: block;
+  color: #668071;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.review-header h1 {
+  margin: 7px 0 8px;
+  color: #173b29;
+  font-size: 29px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.review-header-copy p {
+  max-width: 760px;
+  margin: 0;
+  color: #6e7c73;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.review-reset-button {
+  display: inline-flex;
+  min-height: 36px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 13px;
+  border: 1px solid #d8e2da;
+  border-radius: 6px;
+  background: #fff;
+  color: #52655a;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.review-reset-button:hover {
+  border-color: #aabdaf;
+  background: #f7faf7;
+  color: #2f6143;
+}
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.review-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 11px;
+  margin-bottom: 18px;
+}
+
+.review-stat-card {
+  display: flex;
+  min-height: 104px;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #e0e7e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.review-stat-icon {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: #edf4ee;
+  color: #3b714e;
+}
+
+.review-stat-icon.pending {
+  background: #f5f1e7;
+  color: #8a7548;
+}
+
+.review-stat-icon.valid {
+  background: #e8f2eb;
+  color: #2f7048;
+}
+
+.review-stat-icon.revision {
+  background: #f5eeea;
+  color: #986553;
+}
+
+.review-stat-card > div:last-child {
+  min-width: 0;
+}
+
+.review-stat-card span {
+  display: block;
+  margin-bottom: 4px;
+  color: #748178;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.review-stat-card strong {
+  display: block;
+  color: #244f35;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.review-stat-card small {
+  display: block;
+  margin-top: 6px;
+  color: #909b94;
+  font-size: 8px;
+}
+
+/* =========================================================
+   INFORMATION
+   ========================================================= */
+
+.review-information {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid #dce7df;
+  border-left: 3px solid #5c886b;
+  border-radius: 7px;
+  background: #f7faf7;
+}
+
+.review-information-icon {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #e7f0e9;
+  color: #39704e;
+}
+
+.review-information strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #315340;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.review-information p {
+  margin: 0;
+  color: #78857d;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.review-information b {
+  color: #39704e;
+  font-weight: 700;
+}
+
+/* =========================================================
+   CONTROL PANEL
+   ========================================================= */
+
+.review-control-panel {
+  margin-bottom: 18px;
+  padding: 10px;
+  border: 1px solid #e0e7e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.review-control-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.review-search {
+  position: relative;
+  flex: 1;
+  max-width: 390px;
+}
+
+.review-search > svg {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  color: #87928a;
+  transform: translateY(-50%);
+}
+
+.review-search input {
+  width: 100%;
+  height: 35px;
+  box-sizing: border-box;
+  padding: 0 32px 0 31px;
+  border: 1px solid #dce4de;
+  border-radius: 5px;
+  outline: none;
+  background: #fff;
+  color: #354d3e;
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.review-search input:focus {
+  border-color: #8ca995;
+}
+
+.review-search input::placeholder {
+  color: #a0aaa3;
+}
+
+.review-clear-search {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: flex;
+  width: 23px;
+  height: 23px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #7d8981;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.review-clear-search:hover {
+  background: #f0f4f1;
+}
+
+.review-filter-group {
+  display: flex;
+  height: 35px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 9px;
+  border: 1px solid #dce4de;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.review-filter-group > svg {
+  flex-shrink: 0;
+  color: #7e8a82;
+}
+
+.review-filter-group select {
+  min-width: 120px;
+  height: 31px;
+  padding: 0 17px 0 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #58675e;
+  font-family: inherit;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.review-filter-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 9px;
+  padding: 8px 3px 0;
+  border-top: 1px solid #f0f3f0;
+}
+
+.review-filter-summary span {
+  color: #8a958d;
+  font-size: 8.5px;
+}
+
+.review-filter-summary strong {
+  color: #4a6654;
+  font-weight: 700;
+}
+
+.review-filter-summary button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #39704e;
+  font-family: inherit;
+  font-size: 8.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.review-filter-summary button:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   SECTION HEADING
+   ========================================================= */
+
+.review-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.review-section-heading h2 {
+  margin: 5px 0 0;
+  color: #244733;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.review-result-count {
+  flex-shrink: 0;
+  padding: 5px 8px;
+  border: 1px solid #dfe7e1;
+  border-radius: 5px;
+  background: #fafcf9;
+  color: #64736a;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.review-table-section {
+  margin-bottom: 20px;
+}
+
+.review-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid #e0e7e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.review-table {
+  width: 100%;
+  min-width: 1050px;
+  border-collapse: collapse;
+}
+
+.review-table th {
+  height: 38px;
+  padding: 0 12px;
+  border-bottom: 1px solid #e5ebe6;
+  background: #f8faf8;
+  color: #7a867e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.review-table td {
+  min-height: 61px;
+  padding: 9px 12px;
+  border-bottom: 1px solid #edf1ed;
+  color: #56655b;
+  font-size: 9.5px;
+  vertical-align: middle;
+}
+
+.review-table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.review-table tbody tr:hover {
+  background: #f9fbf9;
+}
+
+.review-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* =========================================================
+   STUDENT
+   ========================================================= */
+
+.review-student {
+  display: flex;
+  min-width: 175px;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-avatar {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e9f1eb;
+  color: #35664a;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.review-student > div:last-child {
+  min-width: 0;
+}
+
+.review-student strong {
+  display: block;
+  max-width: 145px;
+  overflow: hidden;
+  color: #304a39;
+  font-size: 9.5px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-student span {
+  display: block;
+  margin-top: 3px;
+  color: #8a958d;
+  font-size: 8px;
+}
+
+/* =========================================================
+   ACTIVITY
+   ========================================================= */
+
+.review-activity {
+  min-width: 190px;
+}
+
+.review-activity strong {
+  display: block;
+  max-width: 250px;
+  overflow: hidden;
+  color: #344d3d;
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-activity span {
+  display: block;
+  max-width: 250px;
+  margin-top: 3px;
+  overflow: hidden;
+  color: #8c978f;
+  font-size: 7.8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   CATEGORY
+   ========================================================= */
+
+.review-category {
+  display: inline-flex;
+  padding: 4px 7px;
+  border-radius: 4px;
+  background: #f0f5f1;
+  color: #467258;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   DATE / IMPACT
+   ========================================================= */
+
+.review-date {
+  color: #6f7d74;
+  font-size: 8.5px;
+  white-space: nowrap;
+}
+
+.review-impact {
+  color: #3b6e4d;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.review-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 7px;
+  border-radius: 4px;
+  font-size: 7.8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.review-status-pending {
+  background: #f6f2e8;
+  color: #8a7548;
+}
+
+.review-status-valid {
+  background: #eaf3ec;
+  color: #34704c;
+}
+
+.review-status-revision {
+  background: #f6eee9;
+  color: #986452;
+}
+
+.review-status-rejected {
+  background: #f7eaea;
+  color: #a35650;
+}
+
+/* =========================================================
+   EVIDENCE
+   ========================================================= */
+
+.review-evidence {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #9aa39d;
+  font-size: 8px;
+}
+
+.review-evidence.available {
+  color: #39704e;
+  font-weight: 600;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.review-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.review-actions button {
+  display: flex;
+  width: 27px;
+  height: 27px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: #7b887f;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.review-actions button:hover {
+  border-color: #dce5de;
+  background: #f2f6f2;
+  color: #326748;
+}
+
+.review-actions button.review-action-primary {
+  color: #39704e;
+}
+
+.review-actions button.review-action-primary:hover {
+  border-color: #c8ddcd;
+  background: #eaf3ec;
+}
+
+.review-actions button.review-action-danger:hover {
+  border-color: #ead8d4;
+  background: #fff5f3;
+  color: #a45e51;
+}
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.review-empty {
+  display: flex;
+  min-height: 170px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #9aa49d;
+}
+
+.review-empty svg {
+  margin-bottom: 5px;
+}
+
+.review-empty strong {
+  color: #66746b;
+  font-size: 11px;
+}
+
+.review-empty span {
+  color: #929c95;
+  font-size: 9px;
+}
+
+/* =========================================================
+   MODAL BACKDROP
+   ========================================================= */
+
+.review-modal-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(18, 42, 28, 0.43);
+}
+
+/* =========================================================
+   REVIEW MODAL
+   ========================================================= */
+
+.review-modal {
+  width: min(650px, 100%);
+  max-height: 91vh;
+  overflow-y: auto;
+  border: 1px solid #dce5de;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 22px 70px rgba(15, 43, 27, 0.2);
+}
+
+.review-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 17px 19px;
+  border-bottom: 1px solid #edf1ed;
+}
+
+.review-modal-header h2 {
+  margin: 4px 0 0;
+  color: #244733;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.review-modal-close {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #77847c;
+  cursor: pointer;
+}
+
+.review-modal-close:hover {
+  background: #f1f5f1;
+  color: #365844;
+}
+
+/* =========================================================
+   MODAL BODY
+   ========================================================= */
+
+.review-modal-body {
+  padding: 18px 19px;
+}
+
+/* =========================================================
+   STUDENT DETAIL
+   ========================================================= */
+
+.review-detail-student {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.review-detail-avatar {
+  display: flex;
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e9f1eb;
+  color: #35664a;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.review-detail-student > div:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+
+.review-detail-student strong {
+  display: block;
+  color: #304a39;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.review-detail-student span:not(.review-status) {
+  display: block;
+  margin-top: 3px;
+  color: #89948c;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   DETAIL GRID
+   ========================================================= */
+
+.review-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 11px;
+}
+
+.review-detail-grid > div {
+  padding: 10px;
+  border: 1px solid #e7ede8;
+  border-radius: 6px;
+  background: #fafcf9;
+}
+
+.review-detail-grid strong {
+  display: block;
+  margin-top: 5px;
+  color: #365845;
+  font-size: 10px;
+}
+
+.review-detail-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #849087;
+  font-size: 8px;
+}
+
+/* =========================================================
+   ACTIVITY DETAIL
+   ========================================================= */
+
+.review-detail-activity {
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e9e3;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.review-detail-activity span {
+  display: block;
+  margin-bottom: 5px;
+  color: #87928a;
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.review-detail-activity strong {
+  display: block;
+  color: #304a39;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   EVIDENCE SECTION
+   ========================================================= */
+
+.review-evidence-section {
+  margin-bottom: 12px;
+}
+
+.review-detail-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 7px;
+  color: #496254;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.review-detail-title svg {
+  color: #4a7959;
+}
+
+.review-evidence-preview {
+  display: flex;
+  min-height: 180px;
+  max-height: 320px;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dfe7e1;
+  border-radius: 7px;
+  background: #f5f8f5;
+}
+
+.review-evidence-preview img {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+}
+
+.review-no-evidence {
+  display: flex;
+  min-height: 135px;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 1px dashed #d7e1d9;
+  border-radius: 7px;
+  background: #fafcf9;
+  text-align: center;
+}
+
+.review-no-evidence svg {
+  margin-bottom: 8px;
+  color: #9ba79f;
+}
+
+.review-no-evidence strong {
+  color: #68766d;
+  font-size: 10px;
+}
+
+.review-no-evidence span {
+  max-width: 300px;
+  margin-top: 4px;
+  color: #929d96;
+  font-size: 8.5px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   NOTES
+   ========================================================= */
+
+.review-note-box {
+  padding: 11px 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: #f7faf7;
+}
+
+.review-note-box > span,
+.review-admin-note > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+  color: #637268;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.review-note-box p,
+.review-admin-note p {
+  margin: 0;
+  color: #718078;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.review-admin-note {
+  padding: 11px 12px;
+  margin-bottom: 4px;
+  border-left: 2px solid #6c9078;
+  border-radius: 4px;
+  background: #f6f9f6;
+}
+
+/* =========================================================
+   ASSESSMENT
+   ========================================================= */
+
+.review-assessment {
+  padding: 13px;
+  border: 1px solid #dce7df;
+  border-radius: 7px;
+  background: #f9fbf9;
+}
+
+.review-form-label {
+  display: block;
+  margin: 12px 0 5px;
+  color: #59695f;
+  font-size: 8.5px;
+  font-weight: 700;
+}
+
+.review-assessment textarea {
+  width: 100%;
+  min-height: 80px;
+  box-sizing: border-box;
+  padding: 9px;
+  border: 1px solid #dce5de;
+  border-radius: 5px;
+  outline: none;
+  resize: vertical;
+  background: #fff;
+  color: #3d5446;
+  font-family: inherit;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.review-assessment textarea:focus {
+  border-color: #83a18d;
+}
+
+.review-assessment textarea::placeholder {
+  color: #a2aba5;
+}
+
+.review-assessment-help {
+  margin: 5px 0 0;
+  color: #929c95;
+  font-size: 8px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   MODAL FOOTER
+   ========================================================= */
+
+.review-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  padding: 13px 19px;
+  border-top: 1px solid #edf1ed;
+}
+
+/* =========================================================
+   MODAL BUTTONS
+   ========================================================= */
+
+.review-secondary-button,
+.review-primary-button,
+.review-danger-button,
+.review-revision-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 11px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.review-secondary-button {
+  border: 1px solid #d9e2db;
+  background: #fff;
+  color: #617068;
+}
+
+.review-secondary-button:hover {
+  background: #f6f8f6;
+  border-color: #bfcfc3;
+}
+
+.review-primary-button {
+  border: 1px solid #1f6843;
+  background: #1f6843;
+  color: #fff;
+}
+
+.review-primary-button:hover {
+  border-color: #185536;
+  background: #185536;
+}
+
+.review-danger-button {
+  border: 1px solid #e5cfca;
+  background: #fff8f6;
+  color: #a45e51;
+}
+
+.review-danger-button:hover {
+  border-color: #d6b1aa;
+  background: #fff0ed;
+}
+
+.review-revision-button {
+  border: 1px solid #e4d9c3;
+  background: #fbf7ed;
+  color: #8a7141;
+}
+
+.review-revision-button:hover {
+  border-color: #d4c39e;
+  background: #f7f0df;
+}
+
+/* =========================================================
+   EDIT MODAL
+   ========================================================= */
+
+.review-edit-modal {
+  width: min(650px, 100%);
+}
+
+.review-edit-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 11px;
+  padding: 18px 19px 0;
+}
+
+.review-form-group {
+  min-width: 0;
+}
+
+.review-form-full {
+  grid-column: 1 / -1;
+}
+
+.review-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #59695f;
+  font-size: 8.5px;
+  font-weight: 700;
+}
+
+.review-form-group input,
+.review-form-group select,
+.review-form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dce5de;
+  border-radius: 5px;
+  outline: none;
+  background: #fff;
+  color: #3c5445;
+  font-family: inherit;
+  font-size: 9px;
+}
+
+.review-form-group input,
+.review-form-group select {
+  height: 35px;
+  padding: 0 9px;
+}
+
+.review-form-group textarea {
+  min-height: 70px;
+  padding: 9px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.review-form-group input:focus,
+.review-form-group select:focus,
+.review-form-group textarea:focus {
+  border-color: #83a18d;
+}
+
+.review-form-group input::placeholder,
+.review-form-group textarea::placeholder {
+  color: #a1aaa4;
+}
+
+/* =========================================================
+   DELETE MODAL
+   ========================================================= */
+
+.review-delete-modal {
+  width: min(390px, 100%);
+  padding: 22px;
+  border: 1px solid #e2e7e3;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 22px 70px rgba(15, 43, 27, 0.2);
+  text-align: center;
+}
+
+.review-delete-icon {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  border-radius: 8px;
+  background: #f8ece9;
+  color: #a45e51;
+}
+
+.review-delete-modal h2 {
+  margin: 0 0 7px;
+  color: #304a39;
+  font-size: 16px;
+}
+
+.review-delete-modal > p {
+  margin: 0 auto;
+  max-width: 320px;
+  color: #7d8981;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.review-delete-modal > p strong {
+  color: #53665a;
+}
+
+.review-delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 17px;
+}
+
+/* =========================================================
+   RESPONSIVE — 1100px
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .review-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .review-control-top {
+    flex-wrap: wrap;
+  }
+
+  .review-search {
+    width: 100%;
+    max-width: none;
+    flex-basis: 100%;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — 800px
+   ========================================================= */
+
+@media (max-width: 800px) {
+  .review-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .review-reset-button {
+    width: 100%;
+  }
+
+  .review-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-edit-form {
+    grid-template-columns: 1fr;
+  }
+
+  .review-form-full {
+    grid-column: auto;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — 600px
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .review-header h1 {
+    font-size: 23px;
+  }
+
+  .review-header-copy p {
+    font-size: 10.5px;
+  }
+
+  .review-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-control-top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .review-search,
+  .review-filter-group {
+    width: 100%;
+    max-width: none;
+  }
+
+  .review-filter-group {
+    box-sizing: border-box;
+  }
+
+  .review-filter-group select {
+    flex: 1;
+  }
+
+  .review-filter-summary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .review-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .review-modal-backdrop {
+    padding: 12px;
+  }
+
+  .review-modal {
+    max-height: 94vh;
+  }
+
+  .review-modal-header,
+  .review-modal-body {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .review-modal-footer {
+    flex-wrap: wrap;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .review-modal-footer button {
+    flex: 1;
+  }
+
+  .review-delete-modal {
+    padding: 18px;
+  }
+}
